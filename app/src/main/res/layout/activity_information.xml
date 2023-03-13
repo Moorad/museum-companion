@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Student Name: Moorad Altamimi-->
+<!--Student Number: 854378-->
+
+<!--Note: I am using material 3, if you want to run this activity-->
+<!--import material 3 in your build.gradle file-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    tools:context=".ScrollingActivity"
+    >
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <Button
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight = "0"
+                        app:icon="@drawable/ic_back"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginLeft="5dp"
+                        />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        />
+
+                    <Button
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight = "0"
+                        app:icon="@drawable/ic_more"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginLeft="5dp"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Macintosh Plus"
+                    android:layout_marginHorizontal="@dimen/text_margin"
+                    android:layout_marginBottom="@dimen/text_margin"
+                    android:textSize="30dp"
+                   />
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <ScrollView
+        android:id="@+id/nested_scroll_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout"
+        app:layout_constraintVertical_bias="0.0"
+        >
+
+       <LinearLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:layout_marginVertical="5dp"
+           >
+           <com.google.android.material.card.MaterialCardView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:strokeWidth="0dp"
+               android:layout_marginHorizontal="@dimen/text_margin"
+               >
+               <ImageView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:scaleType="fitXY"
+                   android:adjustViewBounds="true"
+                   android:src="@drawable/macintosh822014"
+                   />
+           </com.google.android.material.card.MaterialCardView>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginHorizontal="@dimen/text_margin"
+               android:layout_marginTop="@dimen/text_margin"
+               android:textSize="25dp"
+               android:text="Description" />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_margin="@dimen/text_margin"
+               android:text="@string/large_text" />
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginHorizontal="@dimen/text_margin"
+               >
+               <Button
+                   style="@style/Widget.Material3.Button"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_weight = "0"
+                   android:text="Visit wikipedia"
+                   android:layout_gravity="left"
+                   />
+               <View
+                   android:layout_width="0dp"
+                   android:layout_height="0dp"
+                   android:layout_weight="1"
+                   />
+
+               <Button
+                   style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="center"
+                   android:gravity="center"
+                   app:icon="@drawable/ic_volume" />
+           </LinearLayout>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginHorizontal="@dimen/text_margin"
+               android:layout_marginTop="@dimen/text_margin"
+               android:textSize="25dp"
+               android:text="Origin of Item" />
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_margin="@dimen/text_margin"
+               >
+
+               <LinearLayout
+                   android:layout_width="0dp"
+                   android:layout_weight="50"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical"
+                   android:layout_gravity="center"
+                   >
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:textColor="@color/md_theme_light_primary"
+                       android:textSize="25dp"
+                       android:text="United States" />
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="
+The Macintosh Plus was first invented by Apple in 1996." />
+               </LinearLayout>
+
+               <ImageView
+                   android:layout_width="500px"
+                   android:layout_height="wrap_content"
+                   android:scaleType="fitXY"
+                   android:adjustViewBounds="true"
+                   android:src="@drawable/graph"
+                   android:padding="@dimen/text_margin"
+                   />
+           </LinearLayout>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginHorizontal="@dimen/text_margin"
+               android:layout_marginBottom="@dimen/text_margin"
+               android:textSize="25dp"
+               android:text="Gallery" />
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginHorizontal="@dimen/text_margin"
+               >
+               <com.google.android.material.card.MaterialCardView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   app:strokeWidth="0dp"
+                   >
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_weight="1"
+                       android:layout_height="140dp"
+                       android:scaleType="centerCrop"
+                       android:adjustViewBounds="true"
+                       android:src="@drawable/macintosh_gallary_0"
+                       />
+               </com.google.android.material.card.MaterialCardView>
+
+               <com.google.android.material.card.MaterialCardView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   app:strokeWidth="0dp"
+                   >
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_weight="1"
+                       android:layout_height="140dp"
+                       android:scaleType="centerCrop"
+                       android:adjustViewBounds="true"
+                       android:src="@drawable/macintosh_gallary_1"
+                       />
+               </com.google.android.material.card.MaterialCardView>
+
+               <com.google.android.material.card.MaterialCardView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   app:strokeWidth="0dp"
+                   >
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_weight="1"
+                       android:layout_height="140dp"
+                       android:scaleType="centerCrop"
+                       android:adjustViewBounds="true"
+                       android:src="@drawable/macintosh_gallary_2"
+                       />
+               </com.google.android.material.card.MaterialCardView>
+           </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginHorizontal="@dimen/text_margin"
+               >
+               <com.google.android.material.card.MaterialCardView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   app:strokeWidth="0dp"
+                   >
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_weight="1"
+                       android:layout_height="140dp"
+                       android:scaleType="centerCrop"
+                       android:adjustViewBounds="true"
+                       android:src="@drawable/macintosh_gallary_0"
+                       />
+               </com.google.android.material.card.MaterialCardView>
+
+               <com.google.android.material.card.MaterialCardView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   app:strokeWidth="0dp"
+                   >
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_weight="1"
+                       android:layout_height="140dp"
+                       android:scaleType="centerCrop"
+                       android:adjustViewBounds="true"
+                       android:src="@drawable/macintosh_gallary_1"
+                       />
+               </com.google.android.material.card.MaterialCardView>
+
+               <com.google.android.material.card.MaterialCardView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   app:strokeWidth="0dp"
+                   >
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_weight="1"
+                       android:layout_height="140dp"
+                       android:scaleType="centerCrop"
+                       android:adjustViewBounds="true"
+                       android:src="@drawable/macintosh_gallary_2"
+                       />
+               </com.google.android.material.card.MaterialCardView>
+
+
+           </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginHorizontal="@dimen/text_margin"
+               >
+               <com.google.android.material.card.MaterialCardView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   app:strokeWidth="0dp"
+                   >
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_weight="1"
+                       android:layout_height="140dp"
+                       android:scaleType="centerCrop"
+                       android:adjustViewBounds="true"
+                       android:src="@drawable/macintosh_gallary_0"
+                       />
+               </com.google.android.material.card.MaterialCardView>
+
+               <com.google.android.material.card.MaterialCardView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   app:strokeWidth="0dp"
+                   >
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_weight="1"
+                       android:layout_height="140dp"
+                       android:scaleType="centerCrop"
+                       android:adjustViewBounds="true"
+                       android:src="@drawable/macintosh_gallary_1"
+                       />
+               </com.google.android.material.card.MaterialCardView>
+
+               <com.google.android.material.card.MaterialCardView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   app:strokeWidth="0dp"
+                   >
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_weight="1"
+                       android:layout_height="140dp"
+                       android:scaleType="centerCrop"
+                       android:adjustViewBounds="true"
+                       android:src="@drawable/macintosh_gallary_2"
+                       />
+               </com.google.android.material.card.MaterialCardView>
+
+
+           </LinearLayout>
+       </LinearLayout>
+
+
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:labelVisibilityMode="labeled"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_nav_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

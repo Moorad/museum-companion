@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Museum companion app</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="large_text">The Macintosh Plus computer is the third model in the Macintosh line, introduced on January 16, 1986, two years after the original Macintosh and a little more than a year after the Macintosh 512K, with a price tag of US$2,599.[1] As an evolutionary improvement over the 512K, it shipped with 1 MB of RAM standard, expandable to 4 MB, and an external SCSI peripheral bus, among smaller improvements. Originally, the computer\'s case was the same beige color as the original Macintosh, Pantone 453;[2] however, in 1987, the case color was changed to the long-lived, warm gray "Platinum" color.[3]
+    </string>
+    <string name="action_settings">Settings</string>
+</resources>
