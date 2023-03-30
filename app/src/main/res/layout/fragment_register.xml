@@ -9,7 +9,7 @@
     tools:context=".LoginFragment">
 
     <Button
-        android:id="@+id/loginBackButton"
+        android:id="@+id/registerBackButton"
         style="@style/Widget.Material3.Button.IconButton"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -28,32 +28,46 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="@string/login_title"
-                android:textColor="@color/md_theme_light_onBackground"
-                android:textSize="25dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/login_description"
-                android:textColor="@color/md_theme_light_outline"
-                android:textSize="16dp" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/register_title"
+                    android:textColor="@color/md_theme_light_onBackground"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_description"
+                    android:textColor="@color/md_theme_light_outline"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/username"
+                android:layout_marginVertical="10dp"
+                android:gravity="center">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
@@ -81,17 +95,39 @@
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
+
+            <!--            <Spinner-->
+            <!--                android:id="@+id/account_type_spinner"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content" />-->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/menu"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:hint="@string/account_type">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:simpleItems="@array/account_types" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:text="@string/login_button" />
+                android:text="@string/register_button" />
 
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="@string/login_not_registered"
+                android:text="@string/register_not_logged_in"
                 android:layout_gravity="center" />
         </LinearLayout>
 

@@ -8,8 +8,25 @@
     <string name="login_option_login">Sign in to existing account</string>
     <string name="login_option_register">Sign up to a new account</string>
 
+    <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="account_type">Account type</string>
+
+    <string name="login_title"><b>Sign in</b></string>
+    <string name="login_description">Sign into your standard or curator account</string>
+    <string name="login_button">Sign in</string>
+    <string name="login_not_registered">Not registered? Sign up</string>
+
+    <string name="register_title"><b>Sign up</b></string>
+    <string name="register_description">Create a new account as a standard user or curator</string>
+    <string name="register_button">Sign up</string>
+    <string name="register_not_logged_in">You already have an account? Sign in</string>
+
+    <string-array name="account_types">
+        <item>Standard</item>
+        <item>Curator</item>
+    </string-array>
 
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">The Macintosh Plus computer is the third model in the Macintosh line, introduced on January 16, 1986, two years after the original Macintosh and a little more than a year after the Macintosh 512K, with a price tag of US$2,599.[1] As an evolutionary improvement over the 512K, it shipped with 1 MB of RAM standard, expandable to 4 MB, and an external SCSI peripheral bus, among smaller improvements. Originally, the computer\'s case was the same beige color as the original Macintosh, Pantone 453;[2] however, in 1987, the case color was changed to the long-lived, warm gray "Platinum" color.[3]

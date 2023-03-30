@@ -21,8 +21,10 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         val loginFragment = LoginFragment()
+        val registerFragment = RegisterFragment()
 
         val loginOptionButton = findViewById<Button>(R.id.loginOptionButton)
+        val registerOptionButton = findViewById<Button>(R.id.registerOptionButton)
 
         loginOptionButton.setOnClickListener {
             val transaction = supportFragmentManager.beginTransaction()
@@ -33,6 +35,19 @@ class LoginActivity : AppCompatActivity() {
                 R.anim.slide_out
             )
             transaction.replace(R.id.flFragment, loginFragment)
+            transaction.addToBackStack(null);
+            transaction.commit()
+        }
+
+        registerOptionButton.setOnClickListener {
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.setCustomAnimations(
+                R.anim.slide_in,
+                R.anim.fade_out,
+                R.anim.fade_in,
+                R.anim.slide_out
+            )
+            transaction.replace(R.id.flFragment, registerFragment)
             transaction.addToBackStack(null);
             transaction.commit()
         }

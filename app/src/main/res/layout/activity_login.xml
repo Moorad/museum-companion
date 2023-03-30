@@ -63,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="10dp"
             android:text="@string/login_option_guest" />
 
         <Button
@@ -71,13 +72,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="10dp"
             android:text="@string/login_option_login" />
 
         <Button
+            android:id="@+id/registerOptionButton"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="10dp"
             android:text="@string/login_option_register" />
     </LinearLayout>
 
