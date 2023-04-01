@@ -28,5 +28,9 @@ class DB {
 
             return db.collection("users").add(data)
         }
+
+        fun getAvailableMuseums(): Task<QuerySnapshot> {
+            return db.collection("museums").get()
+        }
     }
 }

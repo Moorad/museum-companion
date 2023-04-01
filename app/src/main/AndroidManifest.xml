@@ -12,7 +12,10 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
+            android:name=".museum_select.MuseumSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,21 +25,15 @@
         </activity>
         <activity
             android:name=".SubmissionsActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ScrollingActivity"
             android:exported="true"
             android:label="@string/title_activity_scrolling"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
-
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

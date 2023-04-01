@@ -1,6 +1,5 @@
-package com.example.cs306coursework1
+package com.example.cs306coursework1.login
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,10 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import com.example.cs306coursework1.*
 import com.example.cs306coursework1.helpers.DB
-import com.google.android.material.snackbar.Snackbar
+import com.example.cs306coursework1.helpers.Err
+import com.example.cs306coursework1.museum_select.MuseumSelectActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -28,7 +28,7 @@ class LoginFragment : Fragment() {
     lateinit var passwordText: TextInputEditText
     lateinit var loginButton: Button
 
-    lateinit var mainActivityIntent: Intent
+    lateinit var museumsActivityIntent: Intent
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +42,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mainActivityIntent = Intent(activity, MainActivity::class.java)
+        museumsActivityIntent = Intent(activity, MuseumSelectActivity::class.java)
 
         emailText = view.findViewById(R.id.emailInput)
         passwordText = view.findViewById(R.id.passwordInput)
@@ -74,7 +74,7 @@ class LoginFragment : Fragment() {
 
                         val doc = documents.first()
 
-                        mainActivityIntent.putExtra(
+                        museumsActivityIntent.putExtra(
                             "user_details",
                             UserDetails(
                                 doc.data["uid"].toString(),
@@ -84,29 +84,14 @@ class LoginFragment : Fragment() {
                             )
                         )
 
-                        startActivity(mainActivityIntent)
+                        startActivity(museumsActivityIntent)
                     }
                     .addOnFailureListener { exception ->
-                        displayError(view, exception.message.toString())
+                        Err.displaySnackBar(view, exception.message.toString())
                     }
             } else {
-                displayError(view, task.exception?.message.toString())
+                Err.displaySnackBar(view, task.exception?.message.toString())
             }
         }
     }
-
-    private fun displayError(view: View, message: String) {
-        // Close keyboard
-        val inputMethodManager =
-            view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-
-        // Display snack bar
-        Snackbar.make(
-            view,
-            message,
-            5000
-        ).show()
-    }
-
 }

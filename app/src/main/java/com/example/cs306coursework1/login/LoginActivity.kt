@@ -1,4 +1,4 @@
-package com.example.cs306coursework1
+package com.example.cs306coursework1.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,9 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import com.example.cs306coursework1.*
 import com.example.cs306coursework1.helpers.DB
+import com.example.cs306coursework1.museum_select.MuseumSelectActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -19,12 +21,12 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var constraintLayout: ConstraintLayout
 
-    lateinit var mainActivityIntent: Intent
+    lateinit var museumsActivityIntent: Intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        mainActivityIntent = Intent(this, MainActivity::class.java)
+        museumsActivityIntent = Intent(this, MuseumSelectActivity::class.java)
 
         constraintLayout = findViewById(R.id.constraintLayout)
 
@@ -42,11 +44,11 @@ class LoginActivity : AppCompatActivity() {
 
         // Go to main activity if guest button was clicked
         guestOptionButton.setOnClickListener {
-            mainActivityIntent.putExtra(
+            museumsActivityIntent.putExtra(
                 "user_details",
                 UserDetails(null, "Guest user", null, AccountType.GUEST)
             )
-            startActivity(mainActivityIntent)
+            startActivity(museumsActivityIntent)
         }
 
         // Show login fragment if sign in button was clicked
@@ -78,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
             .addOnSuccessListener { documents ->
                 val doc = documents.first()
 
-                mainActivityIntent.putExtra(
+                museumsActivityIntent.putExtra(
                     "user_details",
                     UserDetails(
                         currentUser?.uid.toString(),
@@ -88,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
                     )
                 )
 
-                startActivity(mainActivityIntent)
+                startActivity(museumsActivityIntent)
             }.addOnFailureListener { exception ->
                 Snackbar.make(constraintLayout, exception.message.toString(), 5000).show()
             }
