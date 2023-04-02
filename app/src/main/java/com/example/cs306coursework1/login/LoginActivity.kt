@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.cs306coursework1.*
+import com.example.cs306coursework1.data.UserDetails
+import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.museum_select.MuseumSelectActivity
 import com.google.firebase.auth.ktx.auth

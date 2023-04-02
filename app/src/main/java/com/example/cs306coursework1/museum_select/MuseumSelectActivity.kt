@@ -8,8 +8,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
+import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Err
+import com.example.cs306coursework1.helpers.Misc
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.firestore.DocumentSnapshot
 
 class MuseumSelectActivity : AppCompatActivity() {
@@ -18,10 +21,18 @@ class MuseumSelectActivity : AppCompatActivity() {
         setContentView(R.layout.activity_museum_select)
 
         val noMuseumView = findViewById<LinearLayout>(R.id.noMuseum)
+        val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
         val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
+
+        topAppBar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        val userDetails =
+            Misc.getParcelableFromIntent(intent, "user_details", UserDetails::class.java)
 
         DB.getAvailableMuseums().addOnSuccessListener { documents ->
 
@@ -35,7 +46,7 @@ class MuseumSelectActivity : AppCompatActivity() {
             val cardArrayList = populateList(documents.documents)
 
 
-            val adapter = MuseumsAdapter(cardArrayList)
+            val adapter = MuseumsAdapter(this, cardArrayList, userDetails)
             recyclerView.adapter = adapter
         }.addOnFailureListener { exception ->
             Err.displaySnackBar(constraintLayout, exception.message.toString())
@@ -50,6 +61,7 @@ class MuseumSelectActivity : AppCompatActivity() {
             card.setName(doc["name"].toString())
             card.setCuratorName(doc["owner_name"].toString())
             card.setDescription(doc["description"].toString())
+            card.setID(doc.id)
             list.add(card)
         }
 

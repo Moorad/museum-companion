@@ -1,6 +1,5 @@
 package com.example.cs306coursework1.login
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import com.example.cs306coursework1.*
+import com.example.cs306coursework1.data.UserDetails
+import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Err
 import com.example.cs306coursework1.museum_select.MuseumSelectActivity

@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.example.cs306coursework1.*
+import com.example.cs306coursework1.data.UserDetails
+import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Err
 import com.example.cs306coursework1.museum_select.MuseumSelectActivity

@@ -9,7 +9,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".BrowseActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
@@ -62,174 +62,6 @@
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logged in as"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:elevation="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20px"
-        android:text="CoFo 102"
-        app:layout_constraintTop_toBottomOf="@+id/coordinator_layout"
-        app:layout_constraintBottom_toTopOf="@+id/textView8"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="left"
-        android:textSize="23dp"
-        android:textFontWeight="700"
-        android:paddingHorizontal="20dp"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20px"
-        android:text="Select the one of the artefacts from the map to view details"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="left"
-        android:textColor="@color/md_theme_light_onSurfaceVariant"
-        android:paddingHorizontal="50dp"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="900px"
-        android:layout_height="700px"
-        android:src="@drawable/elementary_school_classroom_layout"
-        app:layout_constraintBottom_toTopOf="@+id/artefact_number_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coordinator_layout" />
-
-    <!--    This is the numbered circles on top of the map view-->
-    <LinearLayout
-        android:layout_width="900px"
-        android:layout_height="700px"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/artefact_number_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coordinator_layout">
-
-        <TextView
-            android:layout_width="70px"
-            android:layout_height="70px"
-            android:background="@drawable/shapes"
-            android:elevation="2dp"
-            android:gravity="center"
-            android:layout_gravity="bottom"
-            android:text="1"
-            android:layout_marginLeft="28dp"
-            android:layout_marginRight="3dp"
-            android:layout_marginBottom="4dp"
-            android:textColor="@color/md_theme_light_onPrimary" />
-
-        <TextView
-            android:layout_width="70px"
-            android:layout_height="70px"
-            android:background="@drawable/shapes"
-            android:elevation="2dp"
-            android:gravity="center"
-            android:text="2"
-            android:layout_marginRight="3dp"
-            android:layout_marginBottom="4dp"
-            android:layout_gravity="bottom"
-            android:textColor="@color/md_theme_light_onPrimary" />
-
-        <TextView
-            android:layout_width="70px"
-            android:layout_height="70px"
-            android:background="@drawable/shapes"
-            android:elevation="2dp"
-            android:gravity="center"
-            android:text="3"
-            android:layout_marginRight="3dp"
-            android:layout_marginBottom="4dp"
-            android:layout_gravity="bottom"
-            android:textColor="@color/md_theme_light_onPrimary"
-
-            />
-
-        <TextView
-            android:layout_width="70px"
-            android:layout_height="70px"
-            android:background="@drawable/shapes"
-            android:elevation="2dp"
-            android:gravity="center"
-            android:text="4"
-            android:layout_marginRight="3dp"
-            android:layout_marginBottom="4dp"
-            android:layout_gravity="bottom"
-            android:textColor="@color/md_theme_light_onPrimary"
-
-            />
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="70px"
-            android:layout_height="70px"
-            android:background="@drawable/shapes"
-            android:elevation="2dp"
-            android:gravity="center"
-            android:text="5"
-            android:layout_marginBottom="4dp"
-            android:layout_gravity="bottom"
-            android:textColor="@color/md_theme_light_onPrimary" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/artefact_number_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20px"
-                android:text="Or type the artefact number" />
-
-        </LinearLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:hint="Artefact number"
-            app:helperText="The artefact number is displayed next to the artefact"
-            android:gravity="center">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
 
     <Button
         android:id="@+id/signOutButton"
@@ -239,7 +71,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/floating_action_button"

@@ -71,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="@string/action_edit"
+                    android:visibility="gone"
                     style="?attr/materialButtonOutlinedStyle" />
 
 

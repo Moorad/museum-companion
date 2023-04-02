@@ -1,9 +1,19 @@
 package com.example.cs306coursework1.museum_select
 
 class MuseumsModal {
-    var museumName: String? = null;
+    private var museumID: String? = null;
+    private var museumName: String? = null;
     private var museumDescription: String? = null
     private var museumCuratorName: String? = null
+
+
+    fun getID(): String {
+        return museumID.toString()
+    }
+
+    fun setID(uid: String) {
+        this.museumID = uid
+    }
 
     fun getName(): String {
         return museumName.toString()
