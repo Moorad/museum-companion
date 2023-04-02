@@ -24,7 +24,7 @@
             android:name=".museum_select.MuseumSelectActivity"
             android:exported="false" />
         <activity
-            android:name=".BrowseActivity"
+            android:name=".browse.BrowseActivity"
             android:exported="false" />
         <activity
             android:name=".SubmissionsActivity"
