@@ -32,5 +32,9 @@ class DB {
         fun getAvailableMuseums(): Task<QuerySnapshot> {
             return db.collection("museums").get()
         }
+
+        fun getArtefactsOfMuseum(museum_id: String): Task<QuerySnapshot> {
+            return db.collection("artefacts").whereEqualTo("museum_id", museum_id).get()
+        }
     }
 }

@@ -6,17 +6,17 @@
     android:gravity="center_vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:src="@drawable/ah" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginHorizontal="10dp"
-        >
+        android:layout_marginHorizontal="10dp">
+
         <ProgressBar
             android:id="@+id/level_progress"
             android:layout_width="50dp"
@@ -28,8 +28,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <TextView
             android:id="@+id/level"
             android:layout_width="50dp"
@@ -39,8 +39,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="3"
-            android:gravity="center"
-            />
+            android:gravity="center" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -50,29 +49,25 @@
         android:layout_weight="1"
         android:layout_height="50dp"
         android:text="foo bar"
-        android:gravity="center_vertical"
-        />
+        android:gravity="center_vertical" />
 
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_view"
-        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-        />
+        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_close"
-        style="@style/Widget.Material3.Button.IconButton.Outlined"
-        />
+        style="@style/Widget.Material3.Button.IconButton.Outlined" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_check"
-        style="@style/Widget.Material3.Button.IconButton.Filled"
-        />
+        style="@style/Widget.Material3.Button.IconButton.Filled" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

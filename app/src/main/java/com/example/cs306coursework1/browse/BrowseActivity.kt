@@ -20,6 +20,8 @@ class BrowseActivity : AppCompatActivity() {
     private var auth = Firebase.auth
     private var isMapView = true
 
+    private var museumDetails: MuseumDetails? = null
+
     lateinit var loginActivityIntent: Intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +33,7 @@ class BrowseActivity : AppCompatActivity() {
 
         val userDetails =
             Misc.getParcelableFromIntent(intent, "user_details", UserDetails::class.java)
-        val museumDetails =
+        museumDetails =
             Misc.getParcelableFromIntent(intent, "museum_details", MuseumDetails::class.java)
 
         Log.println(Log.INFO, "user_details", userDetails.toString())
@@ -44,7 +46,7 @@ class BrowseActivity : AppCompatActivity() {
             findViewById<ExtendedFloatingActionButton>(R.id.switchViewFloatingButton)
 
         // Show map fragment by default
-        showFragment(mapFragment)
+        showFragment(listFragment)
 
         switchViewButton.setOnClickListener {
             if (isMapView) {
@@ -84,5 +86,9 @@ class BrowseActivity : AppCompatActivity() {
         transaction.replace(R.id.flFragment, fragment)
         transaction.addToBackStack(null);
         transaction.commit()
+    }
+
+    fun getMuseumDetails(): MuseumDetails? {
+        return this.museumDetails
     }
 }

@@ -11,8 +11,8 @@ class MuseumsModal {
         return museumID.toString()
     }
 
-    fun setID(uid: String) {
-        this.museumID = uid
+    fun setID(id: String) {
+        this.museumID = id
     }
 
     fun getName(): String {

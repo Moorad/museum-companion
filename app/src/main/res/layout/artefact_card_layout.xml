@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <com.google.android.material.card.MaterialCardView
+        style="?attr/materialCardViewElevatedStyle"
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Title, secondary and supporting text -->
+
+                <TextView
+                    android:id="@+id/cardName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="name"
+                    android:textAppearance="?attr/textAppearanceTitleLarge" />
+
+                <TextView
+                    android:id="@+id/cardDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="description"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginVertical="8dp">
+
+
+                    <TextView
+                        android:id="@+id/cardLabel"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Label: 1A"
+                        android:drawableLeft="@drawable/ic_label"
+                        android:drawableTint="@color/md_theme_light_onSurface"
+                        android:drawablePadding="2dp"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="•"
+                        android:gravity="center"
+                        android:paddingHorizontal="12dp" />
+
+                    <TextView
+                        android:id="@+id/cardAdded"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Added: 12 Nov 2023"
+                        android:drawableLeft="@drawable/ic_calendar"
+                        android:drawableTint="@color/md_theme_light_onSurface"
+                        android:drawablePadding="2dp"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!--                <TextView-->
+                <!--                    android:id="@+id/cardCurator"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:text="Artefact tags"-->
+                <!--                    android:textAppearance="?attr/textAppearanceBodyMedium" />-->
+
+                <LinearLayout
+                    android:id="@+id/tagContainer"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="right">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/cardVisitButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_visit"
+                        style="?attr/materialButtonStyle" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
