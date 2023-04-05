@@ -11,6 +11,7 @@ import com.example.cs306coursework1.*
 import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.helpers.DB
+import com.example.cs306coursework1.helpers.Err
 import com.example.cs306coursework1.museum_select.MuseumSelectActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -94,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
 
                 startActivity(museumsActivityIntent)
             }.addOnFailureListener { exception ->
-                Snackbar.make(constraintLayout, exception.message.toString(), 5000).show()
+                Err.displaySnackBar(constraintLayout, exception.message.toString())
             }
     }
 }

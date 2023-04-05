@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/more"
+        android:title="@string/more"
+        android:contentDescription="Edit"
+        android:icon="@drawable/ic_share"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/edit"
+        android:title="@string/more"
+        android:contentDescription="Edit"
+        android:icon="@drawable/ic_edit"
+        app:showAsAction="ifRoom" />
+    <item
+        android:iconTint="@color/md_theme_light_onSurface"
+        android:id="@+id/share"
+        android:title="@string/more"
+        android:contentDescription="Edit"
+        android:icon="@drawable/ic_more"
+        app:showAsAction="ifRoom" />
+</menu>
