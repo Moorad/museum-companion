@@ -4,28 +4,25 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.text.Html
+import android.text.Spanned
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.cs306coursework1.R
-import com.example.cs306coursework1.browse.ListAdapter
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Err
 import com.example.cs306coursework1.helpers.Misc
 import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import com.squareup.picasso.Picasso
 
 class InformationActivity : AppCompatActivity() {
 
-    lateinit var containerLayout: LinearLayout
+    private lateinit var containerLayout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,17 +39,25 @@ class InformationActivity : AppCompatActivity() {
         val originCountryName = findViewById<TextView>(R.id.originCountryName)
         val originDescription = findViewById<TextView>(R.id.originDescription)
         val originContinentImage = findViewById<ImageView>(R.id.originContinentImage)
+
+        val dimensionWidthView = findViewById<TextView>(R.id.dimensionWidth)
+        val dimensionHeightView = findViewById<TextView>(R.id.dimensionHeight)
+        val dimensionDepthView = findViewById<TextView>(R.id.dimensionDepth)
+        val dimensionMassView = findViewById<TextView>(R.id.dimensionMass)
+        val dimensionConditionView = findViewById<TextView>(R.id.dimensionCondition)
+
         val toolbarLayout =
             findViewById<CollapsingToolbarLayout>(R.id.collpasingToolbarLayout)
         val artefactID = intent.getStringExtra("artefact_id").toString()
+        val artefactName = intent.getStringExtra("artefact_name").toString()
 
 
-        DB.getArtefactByID(artefactID).addOnSuccessListener { document ->
+        DB.getArtefactDetailsByID(artefactID).addOnSuccessListener { documents ->
 
-            val details = document.get("details") as Map<String, Any>
+            val details = documents.first()
 
             // Set title of artefact in toolbar
-            toolbarLayout.title = document["title"].toString()
+            toolbarLayout.title = artefactName
 
             // Display hero image
             Misc.setImageFromURL(details["hero_image"].toString(), heroImage)
@@ -77,7 +82,21 @@ class InformationActivity : AppCompatActivity() {
             originCountryName.text = history["origin_country"].toString()
 
             originDescription.text =
-                "The " + document["title"].toString() + " was first invented by " + history["company_name"].toString() + " in " + history["release_date"] + "."
+                "The " + artefactName + " was first invented by " + history["company_name"].toString() + " in " + history["release_date"] + "."
+
+            // Set dimensions of item
+            val dimensions = details["dimensions"] as Map<String, Float>
+
+            dimensionWidthView.text =
+                formatMeasure("Width", dimensions["width"].toString(), "cm")
+            dimensionHeightView.text =
+                formatMeasure("Height", dimensions["height"].toString(), "cm")
+            dimensionDepthView.text =
+                formatMeasure("Depth", dimensions["depth"].toString(), "cm")
+            dimensionMassView.text =
+                formatMeasure("Mass", dimensions["mass"].toString(), "kg")
+            dimensionConditionView.text =
+                formatMeasure("Condition", dimensions["condition"].toString(), null)
 
             originContinentImage.setImageResource(getContinentDrawable(history["continent"].toString()))
 
@@ -112,6 +131,15 @@ class InformationActivity : AppCompatActivity() {
         }
 
         return links
+    }
+
+    private fun formatMeasure(label: String, value: String, unit: String?): Spanned {
+        var str = "<b>$label:</b> $value "
+
+        if (unit != null) {
+            str += unit
+        }
+        return Html.fromHtml(str, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     private fun getContinentDrawable(continentCode: String): Int {

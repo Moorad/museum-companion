@@ -160,6 +160,74 @@ The Macintosh Plus was first invented by Apple in 1996." />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin"
+                android:textSize="25dp"
+                android:text="Dimensions of item" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="@dimen/text_margin">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="300px"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/cube"
+                    android:padding="@dimen/text_margin" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="left"
+                    android:layout_marginLeft="16dp">
+
+                    <TextView
+                        android:id="@+id/dimensionWidth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:text="width: 12cm" />
+
+                    <TextView
+                        android:id="@+id/dimensionHeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:text="width: 12cm" />
+
+                    <TextView
+                        android:id="@+id/dimensionDepth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:text="width: 12cm" />
+
+                    <TextView
+                        android:id="@+id/dimensionMass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:text="width: 12cm" />
+
+                    <TextView
+                        android:id="@+id/dimensionCondition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:text="width: 12cm" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/text_margin"
                 android:textSize="25dp"
                 android:text="Gallery" />

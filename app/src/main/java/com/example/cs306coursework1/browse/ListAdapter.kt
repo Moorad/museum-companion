@@ -70,6 +70,7 @@ class ListAdapter(
         holder.visitButton.setOnClickListener {
 
             infoActivityIntent.putExtra("artefact_id", info.getID())
+            infoActivityIntent.putExtra("artefact_name", info.getName())
             context.startActivity(infoActivityIntent)
         }
     }

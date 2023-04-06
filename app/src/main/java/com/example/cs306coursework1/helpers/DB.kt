@@ -3,8 +3,6 @@ package com.example.cs306coursework1.helpers
 import com.example.cs306coursework1.data.AccountType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -39,8 +37,8 @@ class DB {
             return db.collection("artefacts").whereEqualTo("museum_id", museum_id).get()
         }
 
-        fun getArtefactByID(artefact_id: String): Task<DocumentSnapshot> {
-            return db.collection("artefacts").document(artefact_id).get()
+        fun getArtefactDetailsByID(artefact_id: String): Task<QuerySnapshot> {
+            return db.collection("artefact_details").whereEqualTo("artefact_id", artefact_id).get()
         }
     }
 }
