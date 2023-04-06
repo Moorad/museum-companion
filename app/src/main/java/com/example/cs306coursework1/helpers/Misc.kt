@@ -3,6 +3,10 @@ package com.example.cs306coursework1.helpers
 import android.content.Intent
 import android.os.Build
 import android.os.Parcelable
+import android.widget.ImageView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.squareup.picasso.Picasso
 
 class Misc {
     companion object {
@@ -27,6 +31,17 @@ class Misc {
             // pass in the class of the type returned making it type safe.
 
             return data
+        }
+
+        fun setImageFromURL(url: String, imageView: ImageView) {
+            val imageRef =
+                Firebase.storage.getReferenceFromUrl(url)
+
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                Picasso.get().load(uri.toString()).into(imageView)
+            }.addOnFailureListener { exception ->
+                Err.displaySnackBar(imageView.rootView, exception.message.toString())
+            }
         }
     }
 }

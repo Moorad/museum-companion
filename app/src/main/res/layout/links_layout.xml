@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+
+
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/linkText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/placeholder"
+        android:textColor="@color/md_theme_light_primary"
+        android:drawableLeft="@drawable/ic_link"
+        android:drawableTint="@color/md_theme_light_primary"
+        android:drawablePadding="5dp"
+        android:textSize="16dp"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+</RelativeLayout>

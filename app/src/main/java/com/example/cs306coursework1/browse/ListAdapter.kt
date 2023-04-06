@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cs306coursework1.InformationActivity
+import com.example.cs306coursework1.information.InformationActivity
 import com.example.cs306coursework1.R
 import com.google.android.material.chip.Chip
 
