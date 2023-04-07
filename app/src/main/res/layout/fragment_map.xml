@@ -8,7 +8,7 @@
     tools:context=".browse.MapFragment">
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/museumName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20px"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20px"
         android:text="Select the one of the artefacts from the map to view details"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/museumName"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="left"
@@ -154,10 +154,12 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="Artefact number"
+            app:errorEnabled="true"
             app:helperText="The artefact number is displayed next to the artefact"
             android:gravity="center">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/artefactNumInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text" />

@@ -3,7 +3,7 @@ package com.example.cs306coursework1.login
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import com.google.android.material.snackbar.Snackbar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -11,7 +11,7 @@ import com.example.cs306coursework1.*
 import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.helpers.DB
-import com.example.cs306coursework1.helpers.Err
+import com.example.cs306coursework1.helpers.Misc
 import com.example.cs306coursework1.museum_select.MuseumSelectActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -82,7 +82,6 @@ class LoginActivity : AppCompatActivity() {
         DB.getUserByUID(currentUser?.uid.toString())
             .addOnSuccessListener { documents ->
                 val doc = documents.first()
-
                 museumsActivityIntent.putExtra(
                     "user_details",
                     UserDetails(
@@ -95,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
 
                 startActivity(museumsActivityIntent)
             }.addOnFailureListener { exception ->
-                Err.displaySnackBar(constraintLayout, exception.message.toString())
+                Misc.displaySnackBar(constraintLayout, exception.message.toString())
             }
     }
 }

@@ -61,7 +61,7 @@ class ListFragment : Fragment() {
             Log.println(Log.INFO, "created_at type", doc["created_at"]!!.javaClass.name)
 
             card.setName(doc["title"].toString())
-            card.setDescription(doc["description"].toString())
+            card.setDescription(doc["short_desc"].toString())
             card.setTags(doc["tags"] as ArrayList<String>)
             list.add(card)
         }

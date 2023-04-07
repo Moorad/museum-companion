@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
 import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.helpers.DB
-import com.example.cs306coursework1.helpers.Err
 import com.example.cs306coursework1.helpers.Misc
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.firestore.DocumentSnapshot
@@ -34,6 +33,11 @@ class MuseumSelectActivity : AppCompatActivity() {
         val userDetails =
             Misc.getParcelableFromIntent(intent, "user_details", UserDetails::class.java)
 
+        Misc.displaySnackBar(
+            constraintLayout,
+            "Signed in as " + userDetails?.username.toString(),
+        )
+
         DB.getAvailableMuseums().addOnSuccessListener { documents ->
 
             // If there is no museums display the "No museums added" text
@@ -49,7 +53,7 @@ class MuseumSelectActivity : AppCompatActivity() {
             val adapter = MuseumsAdapter(this, cardArrayList, userDetails)
             recyclerView.adapter = adapter
         }.addOnFailureListener { exception ->
-            Err.displaySnackBar(constraintLayout, exception.message.toString())
+            Misc.displaySnackBar(constraintLayout, exception.message.toString())
         }
     }
 

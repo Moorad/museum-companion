@@ -12,7 +12,7 @@ import com.example.cs306coursework1.*
 import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.helpers.DB
-import com.example.cs306coursework1.helpers.Err
+import com.example.cs306coursework1.helpers.Misc
 import com.example.cs306coursework1.museum_select.MuseumSelectActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.ktx.auth
@@ -66,6 +66,7 @@ class RegisterFragment : Fragment() {
         }
 
         registerButton.setOnClickListener {
+            Misc.closeKeyboard(view)
             createAccount(view)
         }
 
@@ -95,11 +96,11 @@ class RegisterFragment : Fragment() {
                     startActivity(museumsActivityIntent)
                 }
                     .addOnFailureListener { exception ->
-                        Err.displaySnackBar(view, exception.message.toString())
+                        Misc.displaySnackBar(view, exception.message.toString())
                     }
 
             } else {
-                Err.displaySnackBar(view, task.exception?.message.toString())
+                Misc.displaySnackBar(view, task.exception?.message.toString())
             }
         }
     }

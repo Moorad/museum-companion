@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -16,9 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
 import com.example.cs306coursework1.helpers.DB
-import com.example.cs306coursework1.helpers.Err
 import com.example.cs306coursework1.helpers.Misc
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.appbar.MaterialToolbar
 
 class InformationActivity : AppCompatActivity() {
 
@@ -48,75 +49,113 @@ class InformationActivity : AppCompatActivity() {
 
         val toolbarLayout =
             findViewById<CollapsingToolbarLayout>(R.id.collpasingToolbarLayout)
+
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         val artefactID = intent.getStringExtra("artefact_id").toString()
         val artefactName = intent.getStringExtra("artefact_name").toString()
 
 
         DB.getArtefactDetailsByID(artefactID).addOnSuccessListener { documents ->
-
             val details = documents.first()
 
             // Set title of artefact in toolbar
             toolbarLayout.title = artefactName
 
             // Display hero image
-            Misc.setImageFromURL(details["hero_image"].toString(), heroImage)
+            if (details.getString("hero_image") != null) {
+                Misc.setImageFromURL(details["hero_image"].toString(), heroImage)
+            } else {
+                // Hide if the field is not present
+                heroImage.visibility = View.GONE
+            }
+
 
             // Set description
-            val descriptionDetails = details["description"] as Map<String, Any>
-            descriptionText.text = descriptionDetails["text"].toString()
+            if (details.get("description") != null) {
+                val descriptionDetails = details["description"] as Map<String, Any>
+                descriptionText.text = descriptionDetails["text"].toString()
 
-            // Set wiki button link
-            descriptionWikiButton.setOnClickListener {
-                val browserIntent =
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(descriptionDetails["wikipedia_url"].toString())
-                    )
+                // Set wiki button link
+                if (descriptionDetails.get("wikipedia_url") != null) {
+                    descriptionWikiButton.setOnClickListener {
+                        val browserIntent =
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(descriptionDetails["wikipedia_url"].toString())
+                            )
 
-                startActivity(browserIntent)
+                        startActivity(browserIntent)
+                    }
+                } else {
+                    descriptionWikiButton.visibility = View.GONE
+                }
+            } else {
+                // Hide if the field is not present
+                findViewById<LinearLayout>(R.id.descriptionContainer).visibility = View.GONE
             }
 
             // Set origin of item
-            val history = details["history"] as Map<String, String>
-            originCountryName.text = history["origin_country"].toString()
+            if (details.get("history") != null) {
+                val history = details["history"] as Map<String, String>
+                originCountryName.text = history["origin_country"].toString()
 
-            originDescription.text =
-                "The " + artefactName + " was first invented by " + history["company_name"].toString() + " in " + history["release_date"] + "."
+                originDescription.text =
+                    "The " + artefactName + " was first invented by " + history["company_name"].toString() + " in " + history["release_date"] + "."
+
+                originContinentImage.setImageResource(getContinentDrawable(history["continent"].toString()))
+            } else {
+                findViewById<LinearLayout>(R.id.originContainer).visibility = View.GONE
+            }
 
             // Set dimensions of item
-            val dimensions = details["dimensions"] as Map<String, Float>
+            if (details.get("dimensions") != null) {
+                val dimensions = details["dimensions"] as Map<String, Float>
 
-            dimensionWidthView.text =
-                formatMeasure("Width", dimensions["width"].toString(), "cm")
-            dimensionHeightView.text =
-                formatMeasure("Height", dimensions["height"].toString(), "cm")
-            dimensionDepthView.text =
-                formatMeasure("Depth", dimensions["depth"].toString(), "cm")
-            dimensionMassView.text =
-                formatMeasure("Mass", dimensions["mass"].toString(), "kg")
-            dimensionConditionView.text =
-                formatMeasure("Condition", dimensions["condition"].toString(), null)
+                dimensionWidthView.text =
+                    formatMeasure("Width", dimensions["width"].toString(), "cm")
+                dimensionHeightView.text =
+                    formatMeasure("Height", dimensions["height"].toString(), "cm")
+                dimensionDepthView.text =
+                    formatMeasure("Depth", dimensions["depth"].toString(), "cm")
+                dimensionMassView.text =
+                    formatMeasure("Mass", dimensions["mass"].toString(), "kg")
+                dimensionConditionView.text =
+                    formatMeasure("Condition", dimensions["condition"].toString(), null)
+            } else {
+                findViewById<LinearLayout>(R.id.dimensionsContainer).visibility = View.GONE
+            }
 
-            originContinentImage.setImageResource(getContinentDrawable(history["continent"].toString()))
 
             // Set gallery images
-            val imageURLs = details["gallery"] as ArrayList<String>
-            val galleryLayoutManager = GridLayoutManager(this, 3)
-            galleryRecyclerView.layoutManager = galleryLayoutManager
-            val adapter = GalleryAdapter(imageURLs)
-            galleryRecyclerView.adapter = adapter
+            if (details.get("gallery") != null) {
+                val imageURLs = details["gallery"] as ArrayList<String>
+                val galleryLayoutManager = GridLayoutManager(this, 3)
+                galleryRecyclerView.layoutManager = galleryLayoutManager
+                val adapter = GalleryAdapter(imageURLs)
+                galleryRecyclerView.adapter = adapter
+            } else {
+                findViewById<LinearLayout>(R.id.galleryContainer).visibility = View.GONE
+            }
 
             // Set related links
-            val links = details["related_links"] as ArrayList<Map<String, String>>
-            val modals = populateLinks(links)
-            val linksLayoutManager = LinearLayoutManager(this)
-            linksRecyclerView.layoutManager = linksLayoutManager
-            val linksAdapter = LinksAdapter(this, modals)
-            linksRecyclerView.adapter = linksAdapter
+            if (details.get("related_links") != null) {
+                val links = details["related_links"] as ArrayList<Map<String, String>>
+                val modals = populateLinks(links)
+                val linksLayoutManager = LinearLayoutManager(this)
+                linksRecyclerView.layoutManager = linksLayoutManager
+                val linksAdapter = LinksAdapter(this, modals)
+                linksRecyclerView.adapter = linksAdapter
+            } else {
+                findViewById<LinearLayout>(R.id.linksContainer).visibility = View.GONE
+            }
 
         }.addOnFailureListener { exception ->
-            Err.displaySnackBar(containerLayout, exception.message.toString())
+            Misc.displaySnackBar(containerLayout, exception.message.toString())
         }
     }
 
