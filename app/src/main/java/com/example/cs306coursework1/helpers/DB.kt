@@ -49,5 +49,11 @@ class DB {
             return db.collection("artefacts").whereEqualTo("museum_id", museum_id)
                 .whereEqualTo("label", label).get()
         }
+
+        fun createBasicArtefact(
+            data: HashMap<String, Any?>
+        ): Task<DocumentReference> {
+            return db.collection("artefacts").add(data)
+        }
     }
 }

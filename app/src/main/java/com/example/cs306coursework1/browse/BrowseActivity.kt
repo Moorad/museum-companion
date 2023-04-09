@@ -7,10 +7,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.example.cs306coursework1.R
+import com.example.cs306coursework1.SubmissionsActivity
 import com.example.cs306coursework1.data.MuseumDetails
 import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.helpers.Misc
 import com.example.cs306coursework1.login.LoginActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -22,6 +24,7 @@ class BrowseActivity : AppCompatActivity() {
 
     private var museumDetails: MuseumDetails? = null
 
+    lateinit var submissionActivityIntent: Intent
     lateinit var loginActivityIntent: Intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,7 @@ class BrowseActivity : AppCompatActivity() {
         setContentView(R.layout.activity_browse)
 
         loginActivityIntent = Intent(this, LoginActivity::class.java)
+        submissionActivityIntent = Intent(this, SubmissionsActivity::class.java)
 
         val userDetails =
             Misc.getParcelableFromIntent(intent, "user_details", UserDetails::class.java)
@@ -60,6 +64,19 @@ class BrowseActivity : AppCompatActivity() {
             isMapView = !isMapView
         }
 
+
+        val navigationBarView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        navigationBarView.setOnItemReselectedListener { item ->
+            when (item.itemId) {
+                R.id.action_artefacts -> {
+                    true
+                }
+                R.id.action_submissions -> {
+                    startActivity(submissionActivityIntent)
+                    true
+                }
+            }
+        }
 //        switchViewButton.setOnClickListener {
 //            switchViewButton.setCompoundDrawablesWithIntrinsicBounds(
 //                R.drawable.ic_map_view,
