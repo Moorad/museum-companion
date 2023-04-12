@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.login
+package com.example.cs306coursework1.activities.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,7 @@ import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
-import com.example.cs306coursework1.museum_select.MuseumSelectActivity
+import com.example.cs306coursework1.activities.museum_select.MuseumSelectActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 

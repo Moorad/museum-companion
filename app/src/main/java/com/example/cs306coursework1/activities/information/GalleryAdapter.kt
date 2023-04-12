@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.information
+package com.example.cs306coursework1.activities.information
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +18,7 @@ class GalleryAdapter(private val imageArrayList: ArrayList<String>) :
         var imageView = itemView.findViewById<View>(R.id.galleryImage) as ImageView
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val v = inflater.inflate(R.layout.gallery_layout, parent, false)
 
@@ -29,7 +29,7 @@ class GalleryAdapter(private val imageArrayList: ArrayList<String>) :
         return imageArrayList.size
     }
 
-    override fun onBindViewHolder(holder: GalleryAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val url = imageArrayList[position]
 
         Misc.setImageFromURL(url, holder.imageView)

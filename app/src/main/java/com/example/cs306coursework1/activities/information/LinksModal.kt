@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.information
+package com.example.cs306coursework1.activities.information
 
 class LinksModal {
     private var linkTitle: String? = null

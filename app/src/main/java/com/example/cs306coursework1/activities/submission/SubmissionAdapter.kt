@@ -1,4 +1,4 @@
-package com.example.cs306coursework1
+package com.example.cs306coursework1.activities.submission
 
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.RecyclerView
@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.example.cs306coursework1.R
 import kotlin.math.floor
 
-class SubmissionAdapter(private val imageModeArrayList: ArrayList<SubmissionModal>) : RecyclerView.Adapter<SubmissionAdapter.ViewHolder>() {
+class SubmissionAdapter(private val imageModeArrayList: ArrayList<SubmissionModal>) :
+    RecyclerView.Adapter<SubmissionAdapter.ViewHolder>() {
 
-    inner class ViewHolder(itemView: View ): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgView = itemView.findViewById<View>(R.id.icon) as ImageView
         var txtView = itemView.findViewById<View>(R.id.name) as TextView
         var levelTxtView = itemView.findViewById<View>(R.id.level) as TextView

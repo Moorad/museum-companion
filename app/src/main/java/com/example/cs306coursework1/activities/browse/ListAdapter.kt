@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.browse
+package com.example.cs306coursework1.activities.browse
 
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cs306coursework1.information.InformationActivity
+import com.example.cs306coursework1.activities.information.InformationActivity
 import com.example.cs306coursework1.R
 import com.google.android.material.chip.Chip
 
@@ -29,7 +29,7 @@ class ListAdapter(
         var visitButton = itemView.findViewById<View>(R.id.cardVisitButton) as Button
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val v = inflater.inflate(R.layout.artefact_card_layout, parent, false)
 
@@ -40,7 +40,7 @@ class ListAdapter(
         return cardArrayList.size
     }
 
-    override fun onBindViewHolder(holder: ListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = cardArrayList[position]
 
         holder.nameView.text = info.getName()

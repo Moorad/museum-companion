@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.museum_select
+package com.example.cs306coursework1.activities.museum_select
 
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.*
-import com.example.cs306coursework1.browse.BrowseActivity
+import com.example.cs306coursework1.activities.browse.BrowseActivity
 import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.data.MuseumDetails
@@ -30,7 +30,7 @@ class MuseumsAdapter(
         var editButtonView = itemView.findViewById<View>(R.id.cardEditButton) as Button
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MuseumsAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val v = inflater.inflate(R.layout.museum_card_layout, parent, false)
 
@@ -41,7 +41,7 @@ class MuseumsAdapter(
         return cardArrayList.size
     }
 
-    override fun onBindViewHolder(holder: MuseumsAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = cardArrayList[position]
 
         holder.nameView.text = info.getName()

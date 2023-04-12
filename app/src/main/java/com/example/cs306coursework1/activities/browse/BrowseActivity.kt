@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.browse
+package com.example.cs306coursework1.activities.browse
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,11 +7,11 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.example.cs306coursework1.R
-import com.example.cs306coursework1.SubmissionsActivity
+import com.example.cs306coursework1.activities.submission.SubmissionsActivity
 import com.example.cs306coursework1.data.MuseumDetails
 import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.helpers.Misc
-import com.example.cs306coursework1.login.LoginActivity
+import com.example.cs306coursework1.activities.login.LoginActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.auth.ktx.auth
@@ -66,7 +66,8 @@ class BrowseActivity : AppCompatActivity() {
 
 
         val navigationBarView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        navigationBarView.setOnItemReselectedListener { item ->
+        navigationBarView.selectedItemId = R.id.action_artefacts
+        navigationBarView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.action_artefacts -> {
                     true
@@ -75,6 +76,7 @@ class BrowseActivity : AppCompatActivity() {
                     startActivity(submissionActivityIntent)
                     true
                 }
+                else -> false
             }
         }
 //        switchViewButton.setOnClickListener {

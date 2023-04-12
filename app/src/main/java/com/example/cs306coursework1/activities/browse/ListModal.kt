@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.browse
+package com.example.cs306coursework1.activities.browse
 
 import com.google.firebase.Timestamp
 import java.time.ZoneOffset

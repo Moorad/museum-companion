@@ -8,58 +8,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SubmissionsActivity">
+    tools:context=".activities.submission.SubmissionsActivity">
 
-    <LinearLayout
-        android:id="@+id/linear_layout_top"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            style="@style/Widget.Material3.Button.IconButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            app:icon="@drawable/ic_back"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_marginLeft="5dp" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Create new artefact"
+            app:navigationIcon="@drawable/ic_back"
+            app:menu="@menu/submission_activity_menu" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submissions"
-            android:textSize="22dp"
-            android:layout_gravity="center" />
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/linear_layout_top"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintTop_BottomOf="@+id/topAppBar"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent">-->
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+    <!--        <Button-->
+    <!--            style="@style/Widget.Material3.Button.IconButton"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="0"-->
+    <!--            app:icon="@drawable/ic_back"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:gravity="center"-->
+    <!--            android:layout_marginLeft="5dp" />-->
 
-        <Button
-            style="@style/Widget.Material3.Button.IconButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            app:icon="@drawable/ic_more"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_marginLeft="5dp" />
-    </LinearLayout>
+    <!--        <View-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="0dp"-->
+    <!--            android:layout_weight="1" />-->
+
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="Submissions"-->
+    <!--            android:textSize="22dp"-->
+    <!--            android:layout_gravity="center" />-->
+
+    <!--        <View-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="0dp"-->
+    <!--            android:layout_weight="1" />-->
+
+    <!--        <Button-->
+    <!--            style="@style/Widget.Material3.Button.IconButton"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="0"-->
+    <!--            app:icon="@drawable/ic_more"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:gravity="center"-->
+    <!--            android:layout_marginLeft="5dp" />-->
+    <!--    </LinearLayout>-->
 
     <com.google.android.material.tabs.TabLayout
         app:tabIndicatorFullWidth="true"
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layout_top"
+        app:layout_constraintTop_toBottomOf="@+id/topAppBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/recycler_view"

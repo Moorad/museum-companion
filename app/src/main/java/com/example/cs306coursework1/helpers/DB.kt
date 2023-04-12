@@ -55,5 +55,9 @@ class DB {
         ): Task<DocumentReference> {
             return db.collection("artefacts").add(data)
         }
+
+        fun createArtefactDetails(data: HashMap<String, Any?>): Task<DocumentReference> {
+            return db.collection("artefact_details").add(data)
+        }
     }
 }

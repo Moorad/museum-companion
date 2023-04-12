@@ -10,7 +10,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".upsert.UpsertActivity">
+    tools:context=".activities.upsert.UpsertActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -25,6 +25,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="Create new artefact"
@@ -148,6 +149,7 @@
                 android:layout_gravity="center">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/descriptionTextEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine" />
@@ -161,6 +163,7 @@
                 android:layout_gravity="center">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/descriptionWikiEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textUri" />
@@ -182,6 +185,7 @@
                 android:layout_gravity="center">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/originCompanyEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -196,6 +200,7 @@
                 android:layout_gravity="center">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/originCountryEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine" />
@@ -211,7 +216,7 @@
                 android:layout_gravity="center">
 
                 <AutoCompleteTextView
-                    android:id="@+id/accountTypeSelect"
+                    android:id="@+id/originContinentEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
@@ -227,6 +232,7 @@
                 android:layout_gravity="center">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/originReleaseEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date" />

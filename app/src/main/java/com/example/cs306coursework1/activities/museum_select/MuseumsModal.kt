@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.museum_select
+package com.example.cs306coursework1.activities.museum_select
 
 class MuseumsModal {
     private var museumID: String? = null;

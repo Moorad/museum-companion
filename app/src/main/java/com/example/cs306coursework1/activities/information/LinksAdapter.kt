@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.information
+package com.example.cs306coursework1.activities.information
 
 import android.content.Context
 import android.content.Intent
@@ -19,7 +19,7 @@ class LinksAdapter(private val context: Context, private val linkArrayList: Arra
         var textView = itemView.findViewById<View>(R.id.linkText) as TextView
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LinksAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val v = inflater.inflate(R.layout.links_layout, parent, false)
 
@@ -30,7 +30,7 @@ class LinksAdapter(private val context: Context, private val linkArrayList: Arra
         return linkArrayList.size
     }
 
-    override fun onBindViewHolder(holder: LinksAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = linkArrayList[position]
 
         holder.textView.text =

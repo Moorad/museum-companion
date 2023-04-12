@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.information
+package com.example.cs306coursework1.activities.information
 
 import android.content.Intent
 import android.net.Uri
@@ -20,6 +20,8 @@ import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.ktx.toObject
 
 class InformationActivity : AppCompatActivity() {
 
@@ -67,7 +69,7 @@ class InformationActivity : AppCompatActivity() {
             toolbarLayout.title = artefactName
 
             // Display hero image
-            if (details.getString("hero_image") != null) {
+            if (existsIn(details, "hero_image")) {
                 Misc.setImageFromURL(details["hero_image"].toString(), heroImage)
             } else {
                 // Hide if the field is not present
@@ -76,12 +78,19 @@ class InformationActivity : AppCompatActivity() {
 
 
             // Set description
-            if (details.get("description") != null) {
+            if (existsIn(details, "description")) {
                 val descriptionDetails = details["description"] as Map<String, Any>
-                descriptionText.text = descriptionDetails["text"].toString()
+
+
+                // Set description text
+                if (existsIn(descriptionDetails, "text")) {
+                    descriptionText.text = descriptionDetails["text"].toString()
+                } else {
+                    descriptionText.visibility = View.GONE
+                }
 
                 // Set wiki button link
-                if (descriptionDetails.get("wikipedia_url") != null) {
+                if (existsIn(descriptionDetails, "wikipedia_url")) {
                     descriptionWikiButton.setOnClickListener {
                         val browserIntent =
                             Intent(
@@ -100,7 +109,7 @@ class InformationActivity : AppCompatActivity() {
             }
 
             // Set origin of item
-            if (details.get("history") != null) {
+            if (existsIn(details, "history")) {
                 val history = details["history"] as Map<String, String>
                 originCountryName.text = history["origin_country"].toString()
 
@@ -113,7 +122,7 @@ class InformationActivity : AppCompatActivity() {
             }
 
             // Set dimensions of item
-            if (details.get("dimensions") != null) {
+            if (existsIn(details, "dimensions")) {
                 val dimensions = details["dimensions"] as Map<String, Float>
 
                 dimensionWidthView.text =
@@ -132,7 +141,7 @@ class InformationActivity : AppCompatActivity() {
 
 
             // Set gallery images
-            if (details.get("gallery") != null) {
+            if (existsIn(details, "gallery")) {
                 val imageURLs = details["gallery"] as ArrayList<String>
                 val galleryLayoutManager = GridLayoutManager(this, 3)
                 galleryRecyclerView.layoutManager = galleryLayoutManager
@@ -143,7 +152,7 @@ class InformationActivity : AppCompatActivity() {
             }
 
             // Set related links
-            if (details.get("related_links") != null) {
+            if (existsIn(details, "related_links")) {
                 val links = details["related_links"] as ArrayList<Map<String, String>>
                 val modals = populateLinks(links)
                 val linksLayoutManager = LinearLayoutManager(this)
@@ -179,6 +188,16 @@ class InformationActivity : AppCompatActivity() {
             str += unit
         }
         return Html.fromHtml(str, HtmlCompat.FROM_HTML_MODE_LEGACY)
+    }
+
+    private fun existsIn(hashMap: Map<String, Any>, entry: String): Boolean {
+        return hashMap.get(entry) != null && hashMap.get(entry) != ""
+    }
+
+    private fun existsIn(
+        hashMap: QueryDocumentSnapshot, entry: String
+    ): Boolean {
+        return hashMap.get(entry) != null && hashMap.get(entry) != ""
     }
 
     private fun getContinentDrawable(continentCode: String): Int {

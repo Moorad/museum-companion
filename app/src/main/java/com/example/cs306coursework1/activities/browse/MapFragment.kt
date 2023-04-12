@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.browse
+package com.example.cs306coursework1.activities.browse
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import com.example.cs306coursework1.R
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
-import com.example.cs306coursework1.information.InformationActivity
+import com.example.cs306coursework1.activities.information.InformationActivity
 import com.google.android.material.textfield.TextInputEditText
 
 class MapFragment : Fragment() {

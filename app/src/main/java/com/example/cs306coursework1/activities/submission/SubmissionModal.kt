@@ -1,4 +1,4 @@
-package com.example.cs306coursework1
+package com.example.cs306coursework1.activities.submission
 
 class SubmissionModal {
     var modelName: String? = null;

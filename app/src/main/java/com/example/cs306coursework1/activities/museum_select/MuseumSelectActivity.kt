@@ -1,4 +1,4 @@
-package com.example.cs306coursework1.museum_select
+package com.example.cs306coursework1.activities.museum_select
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
