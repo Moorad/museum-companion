@@ -3,7 +3,6 @@ package com.example.cs306coursework1.helpers
 import com.example.cs306coursework1.data.AccountType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

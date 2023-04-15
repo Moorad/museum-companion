@@ -1,6 +1,6 @@
 package com.example.cs306coursework1.activities.information
 
-class LinksModal {
+class LinksModel {
     private var linkTitle: String? = null
     private var linkURL: String? = null
 

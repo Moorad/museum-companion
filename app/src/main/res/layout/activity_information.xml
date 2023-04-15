@@ -190,6 +190,7 @@ The Macintosh Plus was first invented by Apple in 1996." />
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:layout_marginVertical="@dimen/text_margin">
 
                     <ImageView
@@ -213,35 +214,40 @@ The Macintosh Plus was first invented by Apple in 1996." />
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
-                            android:text="width: 12cm" />
+                            android:text="Width: 0cm"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/dimensionHeight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
-                            android:text="width: 12cm" />
+                            android:text="Height: 0cm"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/dimensionDepth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
-                            android:text="width: 12cm" />
+                            android:text="Depth: 0cm"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/dimensionMass"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
-                            android:text="width: 12cm" />
+                            android:text="Mass: 0kg"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/dimensionCondition"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
-                            android:text="width: 12cm" />
+                            android:text="Condition: Good"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

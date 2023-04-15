@@ -21,7 +21,6 @@ import com.example.cs306coursework1.helpers.Misc
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.ktx.toObject
 
 class InformationActivity : AppCompatActivity() {
 
@@ -125,16 +124,36 @@ class InformationActivity : AppCompatActivity() {
             if (existsIn(details, "dimensions")) {
                 val dimensions = details["dimensions"] as Map<String, Float>
 
-                dimensionWidthView.text =
-                    formatMeasure("Width", dimensions["width"].toString(), "cm")
-                dimensionHeightView.text =
-                    formatMeasure("Height", dimensions["height"].toString(), "cm")
-                dimensionDepthView.text =
-                    formatMeasure("Depth", dimensions["depth"].toString(), "cm")
-                dimensionMassView.text =
-                    formatMeasure("Mass", dimensions["mass"].toString(), "kg")
-                dimensionConditionView.text =
-                    formatMeasure("Condition", dimensions["condition"].toString(), null)
+                if (existsIn(dimensions, "width")) {
+                    dimensionWidthView.text =
+                        formatMeasure("Width", dimensions["width"].toString(), "cm")
+                    dimensionWidthView.visibility = View.VISIBLE
+                }
+
+                if (existsIn(dimensions, "height")) {
+                    dimensionHeightView.text =
+                        formatMeasure("Height", dimensions["height"].toString(), "cm")
+                    dimensionHeightView.visibility = View.VISIBLE
+                }
+
+                if (existsIn(dimensions, "depth")) {
+                    dimensionDepthView.text =
+                        formatMeasure("Depth", dimensions["depth"].toString(), "cm")
+                    dimensionDepthView.visibility = View.VISIBLE
+                }
+
+                if (existsIn(dimensions, "mass")) {
+                    dimensionMassView.text =
+                        formatMeasure("Mass", dimensions["mass"].toString(), "kg")
+                    dimensionMassView.visibility = View.VISIBLE
+                }
+
+                if (existsIn(dimensions, "condition")) {
+                    dimensionConditionView.text =
+                        formatMeasure("Condition", dimensions["condition"].toString(), null)
+                    dimensionConditionView.visibility = View.VISIBLE
+                }
+
             } else {
                 findViewById<LinearLayout>(R.id.dimensionsContainer).visibility = View.GONE
             }
@@ -168,10 +187,10 @@ class InformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun populateLinks(data: ArrayList<Map<String, String>>): ArrayList<LinksModal> {
-        val links = ArrayList<LinksModal>()
+    private fun populateLinks(data: ArrayList<Map<String, String>>): ArrayList<LinksModel> {
+        val links = ArrayList<LinksModel>()
         data.forEach { link ->
-            val modal = LinksModal()
+            val modal = LinksModel()
             modal.setLinkTitle(link["title"].toString())
             modal.setLinkURL(link["url"].toString())
 

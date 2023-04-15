@@ -55,16 +55,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/text_margin"
-                android:textSize="25dp"
-                android:text="Basic Information" />
+                android:text="Basic Information"
+                android:textSize="25dp" />
 
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:hint="Title"
-                app:errorEnabled="true"
-                android:layout_gravity="center">
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/titleEditText"
@@ -76,10 +76,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Short description"
-                app:helperText="This will be displayed in the artefact browse list. It is advised to keep this brief"
-                android:layout_gravity="center">
+                app:errorEnabled="true"
+                app:helperText="This will be displayed in the artefact browse list. It is advised to keep this brief">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/shortDescEditText"
@@ -91,10 +91,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Label"
-                app:helperText="The label must be unique"
-                android:layout_gravity="center">
+                app:errorEnabled="true"
+                app:helperText="The label must be unique">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/labelEditText"
@@ -107,46 +107,80 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_margin"
-                android:textSize="25dp"
-                android:text="Details" />
+                android:text="Details"
+                android:textSize="25dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/text_margin"
-                android:textSize="15dp"
-                android:text="Every part in this section is optional, it will not be displayed if its left blank" />
+                android:text="Every part in this section is optional, it will not be displayed if its left blank"
+                android:textSize="15dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/text_margin"
-                android:textSize="20dp"
-                android:text="Hero image" />
+                android:text="Hero image"
+                android:textSize="20dp" />
 
-            <Button
-                style="@style/Widget.Material3.Button"
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="Select photo"
-                android:drawableLeft="@drawable/ic_upload"
-                android:layout_gravity="center" />
+                app:strokeWidth="0dp">
+
+                <ImageView
+                    android:id="@+id/heroPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:visibility="gone" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/heroSelectButton"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:drawableLeft="@drawable/ic_upload"
+                    android:text="Select photo" />
+
+                <Button
+                    android:id="@+id/heroRemoveButton"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="0"
+                    android:drawableLeft="@drawable/ic_delete"
+                    android:drawableTint="@color/md_theme_light_primary"
+                    android:text="Remove photo"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/text_margin"
-                android:textSize="20dp"
-                android:text="Description" />
+                android:text="Description"
+                android:textSize="20dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Description text"
-                app:helperText="This cannot be blank if a wikipedia URL is provided"
-                android:layout_gravity="center">
+                app:errorEnabled="true"
+                app:helperText="This cannot be blank if a wikipedia URL is provided">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionTextEditText"
@@ -158,9 +192,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Wikipedia URL"
-                android:layout_gravity="center">
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionWikiEditText"
@@ -173,16 +207,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/text_margin"
-                android:textSize="20dp"
-                android:text="Origin of item" />
+                android:text="Origin of item"
+                android:textSize="20dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Company name"
-                app:helperText="The fields must be all filled or all blank"
-                android:layout_gravity="center">
+                app:errorEnabled="true"
+                app:helperText="The fields must be all filled or all blank">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/originCompanyEditText"
@@ -194,10 +228,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Origin country"
-                app:helperText="E.g. United Kingdom"
-                android:layout_gravity="center">
+                app:errorEnabled="true"
+                app:helperText="E.g. United Kingdom">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/originCountryEditText"
@@ -210,10 +244,10 @@
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginVertical="10dp"
-                app:helperText="This is used for image next to the text"
                 android:hint="Continent"
-                android:layout_gravity="center">
+                app:helperText="This is used for image next to the text">
 
                 <AutoCompleteTextView
                     android:id="@+id/originContinentEditText"
@@ -227,9 +261,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Release year"
-                android:layout_gravity="center">
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/originReleaseEditText"
@@ -242,18 +276,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/text_margin"
-                android:textSize="20dp"
-                android:text="Dimensions" />
+                android:text="Dimensions"
+                android:textSize="20dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Width"
-                app:suffixText="cm"
-                android:layout_gravity="center">
+                app:errorEnabled="true"
+                app:suffixText="cm">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dimensionWidthEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal" />
@@ -262,12 +297,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Height"
-                app:suffixText="cm"
-                android:layout_gravity="center">
+                app:errorEnabled="true"
+                app:suffixText="cm">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dimensionHeightEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal" />
@@ -276,12 +312,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Depth"
-                app:suffixText="cm"
-                android:layout_gravity="center">
+                app:errorEnabled="true"
+                app:suffixText="cm">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dimensionDepthEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal" />
@@ -290,12 +327,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
+                android:layout_gravity="center"
                 android:hint="Mass"
-                app:suffixText="kg"
-                android:layout_gravity="center">
+                app:errorEnabled="true"
+                app:suffixText="kg">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dimensionMassEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal" />
@@ -305,11 +343,12 @@
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginVertical="10dp"
-                android:hint="Condition"
-                android:layout_gravity="center">
+                android:hint="Condition">
 
                 <AutoCompleteTextView
+                    android:id="@+id/dimensionConditionEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
@@ -317,44 +356,51 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/text_margin"
-                android:textSize="20dp"
-                android:text="Gallery" />
+                android:text="Gallery"
+                android:textSize="20dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/galleryRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
 
             <Button
+                android:id="@+id/gallerySelectButton"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select photo"
+                android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_upload"
-                android:layout_gravity="center" />
+                android:text="Select photo" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/text_margin"
-                android:textSize="20dp"
-                android:text="Related links" />
+                android:text="Related links"
+                android:textSize="20dp" />
 
             <Button
                 style="@style/Widget.Material3.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add link"
+                android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_add_link"
-                android:layout_gravity="center" />
+                android:text="Add link" />
 
             <Button
-                style="@style/Widget.Material3.Button"
                 android:id="@+id/submitButton"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:layout_marginTop="12dp"
-                android:text="Submit"
-                android:layout_gravity="right" />
+                android:text="Submit" />
 
         </LinearLayout>
 

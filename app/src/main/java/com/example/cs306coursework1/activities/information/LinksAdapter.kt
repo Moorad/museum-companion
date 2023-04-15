@@ -12,7 +12,7 @@ import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
 
-class LinksAdapter(private val context: Context, private val linkArrayList: ArrayList<LinksModal>) :
+class LinksAdapter(private val context: Context, private val linkArrayList: ArrayList<LinksModel>) :
     RecyclerView.Adapter<LinksAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
