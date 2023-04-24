@@ -106,6 +106,34 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/text_margin"
+                android:text="Tags"
+                android:textSize="20dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tagRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/tagAddButton"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:drawableLeft="@drawable/ic_add_label"
+                    android:text="Add tag" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_margin"
                 android:text="Details"
                 android:textSize="25dp" />
@@ -367,7 +395,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/galleryRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/gallerySelectButton"
@@ -385,7 +413,15 @@
                 android:text="Related links"
                 android:textSize="20dp" />
 
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/linksRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
             <Button
+                android:id="@+id/linkSelectButton"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -38,7 +38,6 @@ class GalleryAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = modelArrayList[position]
 
-
         Misc.setImageFromURL(info.getImageURL(), holder.image)
 
         holder.imageName.text = info.getImageName()

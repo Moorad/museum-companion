@@ -8,6 +8,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
@@ -62,5 +63,16 @@ class Misc {
                 3000
             ).show()
         }
+
+        fun existsIn(hashMap: Map<String, Any>, entry: String): Boolean {
+            return hashMap.get(entry) != null && hashMap.get(entry) != ""
+        }
+
+        fun existsIn(
+            hashMap: QueryDocumentSnapshot, entry: String
+        ): Boolean {
+            return hashMap.get(entry) != null && hashMap.get(entry) != ""
+        }
+
     }
 }

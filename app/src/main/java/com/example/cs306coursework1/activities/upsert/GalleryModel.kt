@@ -19,5 +19,4 @@ class GalleryModel {
     fun setImageName(name: String) {
         this.imageName = name
     }
-
 }

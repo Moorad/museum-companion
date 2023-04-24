@@ -68,7 +68,7 @@ class InformationActivity : AppCompatActivity() {
             toolbarLayout.title = artefactName
 
             // Display hero image
-            if (existsIn(details, "hero_image")) {
+            if (Misc.existsIn(details, "hero_image")) {
                 Misc.setImageFromURL(details["hero_image"].toString(), heroImage)
             } else {
                 // Hide if the field is not present
@@ -77,19 +77,19 @@ class InformationActivity : AppCompatActivity() {
 
 
             // Set description
-            if (existsIn(details, "description")) {
+            if (Misc.existsIn(details, "description")) {
                 val descriptionDetails = details["description"] as Map<String, Any>
 
 
                 // Set description text
-                if (existsIn(descriptionDetails, "text")) {
+                if (Misc.existsIn(descriptionDetails, "text")) {
                     descriptionText.text = descriptionDetails["text"].toString()
                 } else {
                     descriptionText.visibility = View.GONE
                 }
 
                 // Set wiki button link
-                if (existsIn(descriptionDetails, "wikipedia_url")) {
+                if (Misc.existsIn(descriptionDetails, "wikipedia_url")) {
                     descriptionWikiButton.setOnClickListener {
                         val browserIntent =
                             Intent(
@@ -108,7 +108,7 @@ class InformationActivity : AppCompatActivity() {
             }
 
             // Set origin of item
-            if (existsIn(details, "history")) {
+            if (Misc.existsIn(details, "history")) {
                 val history = details["history"] as Map<String, String>
                 originCountryName.text = history["origin_country"].toString()
 
@@ -121,34 +121,34 @@ class InformationActivity : AppCompatActivity() {
             }
 
             // Set dimensions of item
-            if (existsIn(details, "dimensions")) {
+            if (Misc.existsIn(details, "dimensions")) {
                 val dimensions = details["dimensions"] as Map<String, Float>
 
-                if (existsIn(dimensions, "width")) {
+                if (Misc.existsIn(dimensions, "width")) {
                     dimensionWidthView.text =
                         formatMeasure("Width", dimensions["width"].toString(), "cm")
                     dimensionWidthView.visibility = View.VISIBLE
                 }
 
-                if (existsIn(dimensions, "height")) {
+                if (Misc.existsIn(dimensions, "height")) {
                     dimensionHeightView.text =
                         formatMeasure("Height", dimensions["height"].toString(), "cm")
                     dimensionHeightView.visibility = View.VISIBLE
                 }
 
-                if (existsIn(dimensions, "depth")) {
+                if (Misc.existsIn(dimensions, "depth")) {
                     dimensionDepthView.text =
                         formatMeasure("Depth", dimensions["depth"].toString(), "cm")
                     dimensionDepthView.visibility = View.VISIBLE
                 }
 
-                if (existsIn(dimensions, "mass")) {
+                if (Misc.existsIn(dimensions, "mass")) {
                     dimensionMassView.text =
                         formatMeasure("Mass", dimensions["mass"].toString(), "kg")
                     dimensionMassView.visibility = View.VISIBLE
                 }
 
-                if (existsIn(dimensions, "condition")) {
+                if (Misc.existsIn(dimensions, "condition")) {
                     dimensionConditionView.text =
                         formatMeasure("Condition", dimensions["condition"].toString(), null)
                     dimensionConditionView.visibility = View.VISIBLE
@@ -160,7 +160,7 @@ class InformationActivity : AppCompatActivity() {
 
 
             // Set gallery images
-            if (existsIn(details, "gallery")) {
+            if (Misc.existsIn(details, "gallery")) {
                 val imageURLs = details["gallery"] as ArrayList<String>
                 val galleryLayoutManager = GridLayoutManager(this, 3)
                 galleryRecyclerView.layoutManager = galleryLayoutManager
@@ -171,7 +171,7 @@ class InformationActivity : AppCompatActivity() {
             }
 
             // Set related links
-            if (existsIn(details, "related_links")) {
+            if (Misc.existsIn(details, "related_links")) {
                 val links = details["related_links"] as ArrayList<Map<String, String>>
                 val modals = populateLinks(links)
                 val linksLayoutManager = LinearLayoutManager(this)
@@ -207,16 +207,6 @@ class InformationActivity : AppCompatActivity() {
             str += unit
         }
         return Html.fromHtml(str, HtmlCompat.FROM_HTML_MODE_LEGACY)
-    }
-
-    private fun existsIn(hashMap: Map<String, Any>, entry: String): Boolean {
-        return hashMap.get(entry) != null && hashMap.get(entry) != ""
-    }
-
-    private fun existsIn(
-        hashMap: QueryDocumentSnapshot, entry: String
-    ): Boolean {
-        return hashMap.get(entry) != null && hashMap.get(entry) != ""
     }
 
     private fun getContinentDrawable(continentCode: String): Int {

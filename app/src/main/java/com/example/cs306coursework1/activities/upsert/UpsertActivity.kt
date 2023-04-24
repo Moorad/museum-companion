@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,6 +27,8 @@ import com.google.firebase.Timestamp
 class UpsertActivity : AppCompatActivity() {
     private lateinit var museumID: String
     private lateinit var mode: UpsertMode
+
+    private val requiredFields = ArrayList<EditText>()
 
     private lateinit var constraintLayout: ConstraintLayout
 
@@ -53,6 +56,13 @@ class UpsertActivity : AppCompatActivity() {
 
     private lateinit var gallerySelectButton: Button
 
+    private lateinit var linkSelectButton: Button
+
+    private lateinit var tagAddButton: Button
+
+    private lateinit var linkAdapter: LinksAdapter
+    private lateinit var tagAdapter: TagAdapter
+
     private var uploadedImages = hashMapOf<String, Any?>(
         "hero" to null,
         "gallery" to ArrayList<String>()
@@ -65,7 +75,30 @@ class UpsertActivity : AppCompatActivity() {
         mode = UpsertMode.INSERT
         museumID = "R3wYiI9r3XVsUbhA2wAN"
 
-        constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
+        setupViews()
+
+        setupTagRecyclerView()
+        setupHeroSelect()
+        setupGalleryRecyclerView()
+        setupLinksRecyclerView()
+
+        val submitButton = findViewById<Button>(R.id.submitButton)
+
+        submitButton.setOnClickListener {
+            if (isRequiredFieldsFilled()) {
+                val artefactBasicData = getBasicData()
+                val artefactDetailedData = getDetailedData()
+
+                addArtefactDBEntry(artefactBasicData, artefactDetailedData)
+            } else {
+                showErrorOnRequiredFields()
+                Misc.displaySnackBar(constraintLayout, "Required fields cannot be left blank")
+            }
+        }
+    }
+
+    private fun setupViews() {
+        constraintLayout = findViewById(R.id.constraintLayout)
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
 
         toolbar.setNavigationOnClickListener {
@@ -99,46 +132,52 @@ class UpsertActivity : AppCompatActivity() {
 
         gallerySelectButton = findViewById(R.id.gallerySelectButton)
 
-        val singleSelectPhotoMedia =
-            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        linkSelectButton = findViewById(R.id.linkSelectButton)
 
-                if (uri != null) {
-                    Storage.uploadImage(uri, "hero_images", constraintLayout)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val downloadURL = task.result.toString()
+        tagAddButton = findViewById(R.id.tagAddButton)
 
-                                Misc.setImageFromURL(downloadURL, heroPreview)
+    }
 
-                                uploadedImages["hero"] = downloadURL
+    private fun getBasicData(): HashMap<String, Any?> {
+        return hashMapOf(
+            "museum_id" to museumID,
+            "title" to titleEditText.text.toString(),
+            "short_desc" to shortDescEditText.text.toString(),
+            "label" to labelEditText.text.toString(),
+            "created_at" to Timestamp.now(),
+            "tags" to tagAdapter.getTags()
+        )
+    }
 
-                                heroPreview.visibility = View.VISIBLE
-                                heroRemoveButton.visibility = View.VISIBLE
-                            } else {
-                                Misc.displaySnackBar(constraintLayout, task.exception.toString())
-                            }
-                        }
-                }
-            }
+    private fun setupTagRecyclerView() {
+        val tagRecyclerView = findViewById<RecyclerView>(R.id.tagRecyclerView)
 
-        heroSelectButton.setOnClickListener {
-            Log.println(Log.INFO, "hero", "button clicked")
-            singleSelectPhotoMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        val tagLayoutManager = LinearLayoutManager(this)
+        tagRecyclerView.layoutManager = tagLayoutManager
+
+        tagAdapter = TagAdapter(ArrayList())
+        tagRecyclerView.adapter = tagAdapter
+
+        tagAddButton.setOnClickListener {
+            tagAdapter.addItem("")
         }
+    }
 
-        heroRemoveButton.setOnClickListener {
-            if (uploadedImages["hero"] != null) {
-                Storage.deleteImage(uploadedImages["hero"].toString()).addOnSuccessListener {
-                    heroPreview.setImageResource(0)
-                    heroRemoveButton.visibility = View.GONE
+    private fun setupLinksRecyclerView() {
+        val linksRecyclerView = findViewById<RecyclerView>(R.id.linksRecyclerView)
 
-                    uploadedImages["hero"] = null
-                }.addOnFailureListener { exception ->
-                    Misc.displaySnackBar(constraintLayout, exception.message.toString())
-                }
-            }
+        val linksLayoutManager = LinearLayoutManager(this)
+        linksRecyclerView.layoutManager = linksLayoutManager
+
+        linkAdapter = LinksAdapter(ArrayList())
+        linksRecyclerView.adapter = linkAdapter
+
+        linkSelectButton.setOnClickListener {
+            linkAdapter.addItem(LinksModel())
         }
+    }
 
+    private fun setupGalleryRecyclerView() {
         val galleryRecyclerView = findViewById<RecyclerView>(R.id.galleryRecyclerView)
 
         val galleryLayoutManager = LinearLayoutManager(this)
@@ -183,27 +222,48 @@ class UpsertActivity : AppCompatActivity() {
         gallerySelectButton.setOnClickListener {
             multipleSelectPhotoMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-
-
-        val submitButton = findViewById<Button>(R.id.submitButton)
-
-        submitButton.setOnClickListener {
-            val artefactBasicData = getBasicData()
-            val artefactDetailedData = getDetailedData()
-
-            addArtefactDBEntry(artefactBasicData, artefactDetailedData)
-        }
     }
 
-    private fun getBasicData(): HashMap<String, Any?> {
-        return hashMapOf(
-            "museum_id" to museumID,
-            "title" to titleEditText.text.toString(),
-            "short_desc" to shortDescEditText.text.toString(),
-            "label" to labelEditText.text.toString(),
-            "created_at" to Timestamp.now(),
-            "tags" to listOf("Test", "Test 2", "Test 3")
-        )
+    private fun setupHeroSelect() {
+        val singleSelectPhotoMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+
+                if (uri != null) {
+                    Storage.uploadImage(uri, "hero_images", constraintLayout)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val downloadURL = task.result.toString()
+
+                                Misc.setImageFromURL(downloadURL, heroPreview)
+
+                                uploadedImages["hero"] = downloadURL
+
+                                heroPreview.visibility = View.VISIBLE
+                                heroRemoveButton.visibility = View.VISIBLE
+                            } else {
+                                Misc.displaySnackBar(constraintLayout, task.exception.toString())
+                            }
+                        }
+                }
+            }
+
+        heroSelectButton.setOnClickListener {
+            Log.println(Log.INFO, "hero", "button clicked")
+            singleSelectPhotoMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
+        heroRemoveButton.setOnClickListener {
+            if (uploadedImages["hero"] != null) {
+                Storage.deleteImage(uploadedImages["hero"].toString()).addOnSuccessListener {
+                    heroPreview.setImageResource(0)
+                    heroRemoveButton.visibility = View.GONE
+
+                    uploadedImages["hero"] = null
+                }.addOnFailureListener { exception ->
+                    Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                }
+            }
+        }
     }
 
     private fun getDetailedData(): HashMap<String, Any?> {
@@ -254,6 +314,20 @@ class UpsertActivity : AppCompatActivity() {
             data["gallery"] = uploadedImages["gallery"] as ArrayList<String>
         }
 
+        if (linkAdapter.getModels().isNotEmpty()) {
+            data["related_links"] = ArrayList<HashMap<String, String>>()
+            linkAdapter.getModels().forEach { model ->
+                if ((model.getLinkText() != "" || model.getLinkText() != "null") && (model.getLinkURL() != "" || model.getLinkURL() != "null")) {
+                    (data["related_links"] as ArrayList<HashMap<String, String>>).add(
+                        hashMapOf(
+                            "title" to model.getLinkText(),
+                            "url" to model.getLinkURL()
+                        )
+                    )
+                }
+            }
+        }
+
         return data
 
     }
@@ -282,12 +356,28 @@ class UpsertActivity : AppCompatActivity() {
     }
 
     private fun makeRequired(editText: TextInputEditText) {
-        editText.setOnFocusChangeListener { view, isFocused ->
+        requiredFields.add(editText)
 
+        editText.setOnFocusChangeListener { view, isFocused ->
             if (!isFocused) {
                 if (editText.text.toString() == "") {
                     editText.error = "This field is required"
+
                 }
+            }
+        }
+    }
+
+    private fun isRequiredFieldsFilled(): Boolean {
+        return requiredFields.all {
+            it.text.toString() != ""
+        }
+    }
+
+    private fun showErrorOnRequiredFields() {
+        requiredFields.forEach {
+            if (it.text.toString() == "") {
+                it.error = "This field is required"
             }
         }
     }
@@ -310,11 +400,12 @@ class UpsertActivity : AppCompatActivity() {
             val model = GalleryModel()
 
             model.setImageURL(url)
-            model.setImageName("ABC")
+            model.setImageName(url)
 
             models.add(model)
         }
 
         return models
     }
+
 }
