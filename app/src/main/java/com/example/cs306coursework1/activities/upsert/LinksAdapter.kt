@@ -10,14 +10,18 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
+import com.google.android.material.textfield.TextInputLayout
 
 class LinksAdapter(
     private val modelArrayList: ArrayList<LinksModel>,
 ) :
     RecyclerView.Adapter<LinksAdapter.ViewHolder>() {
+    private var isDisabled = false
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var linkText = itemView.findViewById<View>(R.id.textEditText) as TextView
+        var linkTextLayout = itemView.findViewById<View>(R.id.textInputLayout) as TextInputLayout
+        var linkURLLayout = itemView.findViewById<View>(R.id.urlInputLayout) as TextInputLayout
         var linkURL = itemView.findViewById<View>(R.id.urlEditText) as TextView
         var deleteButton = itemView.findViewById<View>(R.id.linkDeleteButton) as Button
     }
@@ -35,6 +39,15 @@ class LinksAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = modelArrayList[position]
+
+        holder.linkText.text = info.getLinkText()
+        holder.linkURL.text = info.getLinkURL()
+
+        if (isDisabled) {
+            holder.linkTextLayout.isEnabled = false
+            holder.linkURLLayout.isEnabled = false
+            holder.deleteButton.visibility = View.GONE
+        }
 
         holder.linkText.addTextChangedListener(object : TextWatcher {
             private val handler = Handler()
@@ -103,5 +116,9 @@ class LinksAdapter(
 
     fun getModels(): ArrayList<LinksModel> {
         return modelArrayList
+    }
+
+    fun disableAllViews() {
+        isDisabled = true
     }
 }

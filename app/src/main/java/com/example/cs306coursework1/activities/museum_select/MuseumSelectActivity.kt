@@ -49,7 +49,6 @@ class MuseumSelectActivity : AppCompatActivity() {
 
             val cardArrayList = populateList(documents.documents)
 
-
             val adapter = MuseumsAdapter(this, cardArrayList, userDetails)
             recyclerView.adapter = adapter
         }.addOnFailureListener { exception ->

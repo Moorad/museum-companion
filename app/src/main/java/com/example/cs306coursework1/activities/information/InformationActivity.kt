@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -16,21 +17,28 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
+import com.example.cs306coursework1.activities.upsert.UpsertActivity
+import com.example.cs306coursework1.data.UpsertMode
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
 class InformationActivity : AppCompatActivity() {
 
     private lateinit var containerLayout: LinearLayout
+    private lateinit var upsertActivityIntent: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_information)
 
         containerLayout = findViewById<LinearLayout>(R.id.containerLayout)
+
+        upsertActivityIntent = Intent(this, UpsertActivity::class.java)
+
         val heroImage = findViewById<ImageView>(R.id.heroImage)
 
         val descriptionText = findViewById<TextView>(R.id.descriptionText)
@@ -57,8 +65,54 @@ class InformationActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+
         val artefactID = intent.getStringExtra("artefact_id").toString()
         val artefactName = intent.getStringExtra("artefact_name").toString()
+
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_edit -> {
+                    upsertActivityIntent.putExtra("mode", UpsertMode.UPDATE)
+                    upsertActivityIntent.putExtra("artefact_id", artefactID)
+                    startActivity(upsertActivityIntent)
+                    true
+                }
+                R.id.action_delete -> {
+                    // USE "R.string.thing" HERE PLS
+                    MaterialAlertDialogBuilder(
+                        this,
+                        com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+                    )
+                        .setTitle("Permanently delete?")
+                        .setIcon(R.drawable.ic_delete)
+                        .setMessage("Are you sure you want to delete this item? You wil not be able to restore this after deleting.")
+                        .setNegativeButton("Cancel", null)
+                        .setPositiveButton("Delete") { _, _ ->
+                            DB.deleteArtefactByID(artefactID).addOnSuccessListener {
+                                Misc.displaySnackBar(containerLayout, "Deleted successfully!")
+                            }
+                        }
+                        .show()
+                    true
+                }
+                R.id.action_share -> {
+                    val sendIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            "Learn more about $artefactName on the ${resources.getString(R.string.app_name)}"
+                        )
+                        type = "text/plain"
+                    }
+
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    startActivity(shareIntent)
+
+                    true
+                }
+                else -> false
+            }
+        }
 
 
         DB.getArtefactDetailsByID(artefactID).addOnSuccessListener { documents ->

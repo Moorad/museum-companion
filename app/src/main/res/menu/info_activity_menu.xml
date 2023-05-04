@@ -3,22 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/more"
+        android:id="@+id/action_share"
         android:title="@string/more"
         android:contentDescription="Edit"
         android:icon="@drawable/ic_share"
+        app:iconTint="@color/md_theme_light_onPrimaryContainer"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/edit"
+        android:id="@+id/action_edit"
         android:title="@string/more"
         android:contentDescription="Edit"
         android:icon="@drawable/ic_edit"
+        app:iconTint="@color/md_theme_light_onPrimaryContainer"
         app:showAsAction="ifRoom" />
     <item
-        android:iconTint="@color/md_theme_light_onSurface"
-        android:id="@+id/share"
+        android:id="@+id/action_delete"
         android:title="@string/more"
-        android:contentDescription="Edit"
-        android:icon="@drawable/ic_more"
+        android:contentDescription="Delete"
+        android:icon="@drawable/ic_delete"
+        app:iconTint="@color/md_theme_light_onPrimaryContainer"
         app:showAsAction="ifRoom" />
 </menu>

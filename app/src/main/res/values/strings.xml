@@ -35,6 +35,8 @@
     <string name="action_edit">Edit</string>
 
     <string name="no_museums"><b>No museums added</b>\nCome back later</string>
+    <string name="no_entry_submissions"><b>You cannot access this page as a Guest user</b>\nPlease register or login as a standard user or a curator</string>
+    <string name="no_submissions"><b>No artefacts submitted</b>\nPress the + on the top app bar to create a new artefact</string>
     <string name="sad"><b>:(</b></string>
 
     <string name="searchbar_hint">Enter text to search</string>

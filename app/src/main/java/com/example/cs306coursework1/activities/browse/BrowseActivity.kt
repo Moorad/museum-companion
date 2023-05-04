@@ -73,7 +73,9 @@ class BrowseActivity : AppCompatActivity() {
                     true
                 }
                 R.id.action_submissions -> {
+                    submissionActivityIntent.putExtra("user_details", userDetails)
                     startActivity(submissionActivityIntent)
+                    overridePendingTransition(0, 0)
                     true
                 }
                 else -> false

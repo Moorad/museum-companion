@@ -1,11 +1,11 @@
 package com.example.cs306coursework1.activities.upsert
 
 class LinksModel {
-    private var linkText: String? = null
-    private var linkURL: String? = null
+    private var linkText: String = ""
+    private var linkURL: String = ""
 
     fun getLinkText(): String {
-        return linkText.toString()
+        return linkText
     }
 
     fun setLinkText(text: String) {
@@ -13,7 +13,7 @@ class LinksModel {
     }
 
     fun getLinkURL(): String {
-        return linkURL.toString()
+        return linkURL
     }
 
     fun setLinkURL(url: String) {

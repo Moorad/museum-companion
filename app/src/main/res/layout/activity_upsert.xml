@@ -126,7 +126,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:drawableLeft="@drawable/ic_add_label"
+                    app:icon="@drawable/ic_add_label"
                     android:text="Add tag" />
 
             </LinearLayout>
@@ -178,7 +178,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:drawableLeft="@drawable/ic_upload"
+                    app:icon="@drawable/ic_upload"
                     android:text="Select photo" />
 
                 <Button
@@ -188,10 +188,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="0"
-                    android:drawableLeft="@drawable/ic_delete"
-                    android:drawableTint="@color/md_theme_light_primary"
+                    app:icon="@drawable/ic_delete"
                     android:text="Remove photo"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
             </LinearLayout>
 
@@ -403,7 +402,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_upload"
+                app:icon="@drawable/ic_upload"
                 android:text="Select photo" />
 
             <TextView
@@ -426,7 +425,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_add_link"
+                app:icon="@drawable/ic_add_link"
                 android:text="Add link" />
 
             <Button

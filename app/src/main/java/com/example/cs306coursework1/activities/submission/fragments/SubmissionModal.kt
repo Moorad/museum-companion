@@ -1,9 +1,10 @@
-package com.example.cs306coursework1.activities.submission
+package com.example.cs306coursework1.activities.submission.fragments
 
 class SubmissionModal {
     var modelName: String? = null;
     private var modelImage: Int = 0
     private var modelLevel: Float = 0.0F
+    private var artefactID: String? = null
 
     fun getName(): String {
         return modelName.toString()
@@ -27,5 +28,13 @@ class SubmissionModal {
 
     fun setLevel(level: Float) {
         this.modelLevel = level
+    }
+
+    fun getArtefactID(): String {
+        return artefactID.toString()
+    }
+
+    fun setArtefactID(id: String) {
+        this.artefactID = id
     }
 }

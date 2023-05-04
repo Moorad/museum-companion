@@ -41,8 +41,9 @@ class MapFragment : Fragment() {
             if (id == EditorInfo.IME_ACTION_DONE) {
                 Misc.closeKeyboard(view)
 
-                DB.getArtefactByLabel(
+                DB.getArtefactByProperty(
                     museumDetails?.id.toString(),
+                    "label",
                     artefactNumInput.text.toString()
                 ).addOnSuccessListener { documents ->
                     if (documents.size() == 0) {

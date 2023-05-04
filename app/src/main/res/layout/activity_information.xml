@@ -26,6 +26,7 @@
             android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
             app:collapsedTitleTextColor="@color/md_theme_light_onPrimaryContainer"
             app:title="An Experimental Evaluation of Relocation Hardware 1970"
+            app:expandedTitleTextColor="@color/md_theme_light_onPrimaryContainer"
             app:maxLines="2">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -47,13 +48,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:fitsSystemWindows="true"
-        android:paddingVertical="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/text_margin"
+            android:paddingVertical="10dp"
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
@@ -297,15 +298,6 @@ The Macintosh Plus was first invented by Apple in 1996." />
 
 
     </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_menu"
-
-        />
 
 
 </LinearLayout>

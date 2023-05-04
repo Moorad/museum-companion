@@ -7,6 +7,5 @@
         android:icon="@drawable/ic_add"
         android:title="Add"
         app:showAsAction="always"
-        android:iconTint="@color/md_theme_light_onBackground"
         />
 </menu>

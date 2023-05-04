@@ -17,6 +17,7 @@ class GalleryAdapter(
     RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
     private var removeListener: (position: Int) -> Unit = { }
+    private var isDisabled = false
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image = itemView.findViewById<View>(R.id.image) as ImageView
@@ -38,6 +39,10 @@ class GalleryAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = modelArrayList[position]
 
+        if (isDisabled) {
+            holder.deleteButton.visibility = View.GONE
+        }
+
         Misc.setImageFromURL(info.getImageURL(), holder.image)
 
         holder.imageName.text = info.getImageName()
@@ -58,5 +63,9 @@ class GalleryAdapter(
 
     fun setOnRemoveListener(removeListener: (position: Int) -> Unit) {
         this.removeListener = removeListener
+    }
+
+    fun disableAllViews() {
+        isDisabled = true
     }
 }

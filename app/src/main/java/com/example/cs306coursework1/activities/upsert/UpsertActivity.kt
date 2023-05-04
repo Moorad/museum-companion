@@ -1,16 +1,22 @@
 package com.example.cs306coursework1.activities.upsert
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
@@ -19,18 +25,22 @@ import com.example.cs306coursework1.data.UpsertMode
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
 import com.example.cs306coursework1.helpers.Storage
+import com.google.android.gms.tasks.Task
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.Timestamp
 
 class UpsertActivity : AppCompatActivity() {
     private lateinit var museumID: String
-    private lateinit var mode: UpsertMode
+    private var mode: UpsertMode? = null
+    private var artefactID: String? = null
 
     private val requiredFields = ArrayList<EditText>()
 
     private lateinit var constraintLayout: ConstraintLayout
+    private lateinit var toolbar: MaterialToolbar
 
     private lateinit var titleEditText: TextInputEditText
     private lateinit var shortDescEditText: TextInputEditText
@@ -56,12 +66,15 @@ class UpsertActivity : AppCompatActivity() {
 
     private lateinit var gallerySelectButton: Button
 
-    private lateinit var linkSelectButton: Button
+    private lateinit var linkAddButton: Button
 
     private lateinit var tagAddButton: Button
 
+    private lateinit var galleryAdapter: GalleryAdapter
     private lateinit var linkAdapter: LinksAdapter
     private lateinit var tagAdapter: TagAdapter
+
+    private lateinit var submitButton: Button
 
     private var uploadedImages = hashMapOf<String, Any?>(
         "hero" to null,
@@ -75,31 +88,39 @@ class UpsertActivity : AppCompatActivity() {
         mode = UpsertMode.INSERT
         museumID = "R3wYiI9r3XVsUbhA2wAN"
 
-        setupViews()
+        mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra("mode", UpsertMode::class.java)
+        } else {
+            intent.getSerializableExtra("mode") as UpsertMode?
+        }
 
+        Log.println(Log.INFO, "mode", mode.toString())
+
+        if (mode == UpsertMode.UPDATE || mode == UpsertMode.VIEW) {
+            artefactID = intent.getStringExtra("artefact_id")
+        }
+
+        Log.println(
+            Log.INFO,
+            "mode",
+            mode.toString()
+        )
+        Log.println(Log.INFO, "artefact_id", artefactID.toString())
+
+        setupViews()
         setupTagRecyclerView()
         setupHeroSelect()
         setupGalleryRecyclerView()
         setupLinksRecyclerView()
 
-        val submitButton = findViewById<Button>(R.id.submitButton)
-
-        submitButton.setOnClickListener {
-            if (isRequiredFieldsFilled()) {
-                val artefactBasicData = getBasicData()
-                val artefactDetailedData = getDetailedData()
-
-                addArtefactDBEntry(artefactBasicData, artefactDetailedData)
-            } else {
-                showErrorOnRequiredFields()
-                Misc.displaySnackBar(constraintLayout, "Required fields cannot be left blank")
-            }
+        if (mode == UpsertMode.UPDATE || mode == UpsertMode.VIEW) {
+            readArtefactAndUpdateViews()
         }
     }
 
     private fun setupViews() {
         constraintLayout = findViewById(R.id.constraintLayout)
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
 
         toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -132,15 +153,39 @@ class UpsertActivity : AppCompatActivity() {
 
         gallerySelectButton = findViewById(R.id.gallerySelectButton)
 
-        linkSelectButton = findViewById(R.id.linkSelectButton)
+        linkAddButton = findViewById(R.id.linkSelectButton)
 
         tagAddButton = findViewById(R.id.tagAddButton)
+
+        submitButton = findViewById(R.id.submitButton)
+
+        submitButton.setOnClickListener {
+            if (isRequiredFieldsFilled()) {
+                val artefactBasicData = getBasicData()
+                val artefactDetailedData = getDetailedData()
+
+                upsertArtefactDBEntry(artefactBasicData, artefactDetailedData)
+
+            } else {
+                showErrorOnRequiredFields()
+                Misc.displaySnackBar(constraintLayout, "Required fields cannot be left blank")
+            }
+        }
+
+        if (mode == UpsertMode.UPDATE) {
+            toolbar.title = "Edit artefact"
+            submitButton.text = "Update"
+        } else if (mode == UpsertMode.VIEW) {
+            toolbar.title = "View artefact"
+            submitButton.visibility = View.GONE
+        }
 
     }
 
     private fun getBasicData(): HashMap<String, Any?> {
         return hashMapOf(
             "museum_id" to museumID,
+            "isApproved" to false,
             "title" to titleEditText.text.toString(),
             "short_desc" to shortDescEditText.text.toString(),
             "label" to labelEditText.text.toString(),
@@ -172,7 +217,7 @@ class UpsertActivity : AppCompatActivity() {
         linkAdapter = LinksAdapter(ArrayList())
         linksRecyclerView.adapter = linkAdapter
 
-        linkSelectButton.setOnClickListener {
+        linkAddButton.setOnClickListener {
             linkAdapter.addItem(LinksModel())
         }
     }
@@ -184,13 +229,11 @@ class UpsertActivity : AppCompatActivity() {
         galleryRecyclerView.layoutManager = galleryLayoutManager
 
         val models = imageURLsToModels(uploadedImages["gallery"] as ArrayList<String>)
-        val adapter = GalleryAdapter(models)
-        galleryRecyclerView.adapter = adapter
+        galleryAdapter = GalleryAdapter(models)
+        galleryRecyclerView.adapter = galleryAdapter
 
-        adapter.setOnRemoveListener { pos ->
-            Log.println(Log.INFO, "gallery", pos.toString())
+        galleryAdapter.setOnRemoveListener { pos ->
             (uploadedImages["gallery"] as ArrayList<String>).removeAt(pos)
-            Log.println(Log.INFO, "gallery", uploadedImages["gallery"].toString())
         }
 
         val multipleSelectPhotoMedia =
@@ -205,7 +248,7 @@ class UpsertActivity : AppCompatActivity() {
                                     val model = GalleryModel()
                                     model.setImageURL(downloadURL)
                                     model.setImageName("ABC")
-                                    adapter.addItem(model)
+                                    galleryAdapter.addItem(model)
 
                                     (uploadedImages["gallery"] as ArrayList<String>).add(downloadURL)
                                 } else {
@@ -264,6 +307,193 @@ class UpsertActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun readArtefactAndUpdateViews() {
+        DB.getArtefactBasicByID(artefactID.toString()).addOnSuccessListener { doc ->
+            titleEditText.setText(doc["title"].toString(), TextView.BufferType.EDITABLE)
+            shortDescEditText.setText(doc["short_desc"].toString(), TextView.BufferType.EDITABLE)
+            labelEditText.setText(doc["label"].toString(), TextView.BufferType.EDITABLE)
+
+            (doc["tags"] as ArrayList<String>).forEach { tag ->
+                tagAdapter.addItem(tag)
+            }
+
+        }.addOnFailureListener { exception ->
+            Misc.displaySnackBar(constraintLayout, exception.message.toString())
+        }
+
+        DB.getArtefactDetailsByID(artefactID.toString()).addOnSuccessListener { documents ->
+            val doc = documents.first()
+
+            // Hero image
+            if (Misc.existsIn(doc, "hero_image")) {
+                Misc.setImageFromURL(doc["hero_image"].toString(), heroPreview)
+                uploadedImages["hero"] = doc["hero_image"].toString()
+
+                heroPreview.visibility = View.VISIBLE
+                heroRemoveButton.visibility = View.VISIBLE
+            }
+
+            // Description
+
+            if (Misc.existsIn(doc, "description")) {
+                val description = doc["description"] as HashMap<String, HashMap<String, String>>
+                descriptionTextEditText.setText(
+                    description["text"].toString(),
+                    TextView.BufferType.EDITABLE
+                )
+
+                descriptionWikiEditText
+                    .setText(
+                        description["wikipedia_url"].toString(),
+                        TextView.BufferType.EDITABLE
+                    )
+            }
+
+            // Origin
+            if (Misc.existsIn(doc, "history")) {
+                val history = doc["history"] as HashMap<String, HashMap<String, String>>
+                originCompanyEditText.setText(
+                    history["company_name"].toString(),
+                    TextView.BufferType.EDITABLE
+                )
+                originCountryEditText.setText(
+                    history["origin_country"].toString(),
+                    TextView.BufferType.EDITABLE
+                )
+                originContinentEditText.setText(
+                    getContinentName(history["continent"].toString()),
+                    false
+                )
+                originReleaseEditText.setText(
+                    history["release_date"].toString(),
+                    TextView.BufferType.EDITABLE
+                )
+            }
+
+            // Dimensions
+            if (Misc.existsIn(doc, "dimensions")) {
+                val dimensions = doc["dimensions"] as HashMap<String, HashMap<String, String>>
+                dimensionWidthEditText.setText(
+                    dimensions["width"].toString(),
+                    TextView.BufferType.EDITABLE
+                )
+                dimensionHeightEditText.setText(
+                    dimensions["height"].toString(),
+                    TextView.BufferType.EDITABLE
+                )
+                dimensionDepthEditText.setText(
+                    dimensions["depth"].toString(),
+                    TextView.BufferType.EDITABLE
+                )
+                dimensionMassEditText.setText(
+                    dimensions["mass"].toString(),
+                    TextView.BufferType.EDITABLE
+                )
+                dimensionConditionEditText.setText(
+                    dimensions["condition"].toString(),
+                    false
+                )
+            }
+
+            // Gallery
+            if (Misc.existsIn(doc, "gallery")) {
+                (doc["gallery"] as ArrayList<String>).forEach { imageURL ->
+                    val model = GalleryModel()
+                    model.setImageURL(imageURL)
+                    model.setImageName("ABC")
+                    galleryAdapter.addItem(model)
+
+                    (uploadedImages["gallery"] as ArrayList<String>).add(imageURL)
+                }
+            }
+
+            // Related links
+            if (Misc.existsIn(doc, "related_links")) {
+                (doc["related_links"] as ArrayList<HashMap<String, String>>).forEach { relatedLink ->
+                    var model = LinksModel()
+                    model.setLinkText(relatedLink["title"].toString())
+                    model.setLinkURL(relatedLink["url"].toString())
+                    linkAdapter.addItem(model)
+                }
+            }
+        }.addOnFailureListener { exception ->
+            Misc.displaySnackBar(constraintLayout, exception.message.toString())
+        }
+
+        // Disable all edit texts and buttons if in view mode
+        if (mode == UpsertMode.VIEW) {
+            val titleInputLayout = (titleEditText.parent as ViewGroup).parent as TextInputLayout
+            titleInputLayout.isEnabled = false
+
+            val shortDescInputLayout =
+                (shortDescEditText.parent as ViewGroup).parent as TextInputLayout
+            shortDescInputLayout.isEnabled = false
+
+            val labelInputLayout = (labelEditText.parent as ViewGroup).parent as TextInputLayout
+            labelInputLayout.isEnabled = false
+
+            tagAdapter.disableAllViews()
+            tagAddButton.isEnabled = false
+
+            heroSelectButton.isEnabled = false
+            heroRemoveButton.isEnabled = false
+
+            val descriptionTextInputLayout =
+                (descriptionTextEditText.parent as ViewGroup).parent as TextInputLayout
+            descriptionTextInputLayout.isEnabled = false
+
+            val descriptionWikiInputLayout =
+                (descriptionWikiEditText.parent as ViewGroup).parent as TextInputLayout
+            descriptionWikiInputLayout.isEnabled = false
+
+            val originCompanyInputLayout =
+                (originCompanyEditText.parent as ViewGroup).parent as TextInputLayout
+            originCompanyInputLayout.isEnabled = false
+
+            val originCountryInputLayout =
+                (originCountryEditText.parent as ViewGroup).parent as TextInputLayout
+            originCountryInputLayout.isEnabled = false
+
+            val originContinentInputLayout =
+                (originContinentEditText.parent as ViewGroup).parent as TextInputLayout
+            originContinentInputLayout.isEnabled = false
+
+            val originReleaseInputLayout =
+                (originReleaseEditText.parent as ViewGroup).parent as TextInputLayout
+            originReleaseInputLayout.isEnabled = false
+
+
+            val dimensionWidthInputLayout =
+                (dimensionWidthEditText.parent as ViewGroup).parent as TextInputLayout
+            dimensionWidthInputLayout.isEnabled = false
+
+            val dimensionHeightInputLayout =
+                (dimensionHeightEditText.parent as ViewGroup).parent as TextInputLayout
+            dimensionHeightInputLayout.isEnabled = false
+
+            val dimensionDepthInputLayout =
+                (dimensionDepthEditText.parent as ViewGroup).parent as TextInputLayout
+            dimensionDepthInputLayout.isEnabled = false
+
+            val dimensionMassInputLayout =
+                (dimensionMassEditText.parent as ViewGroup).parent as TextInputLayout
+            dimensionMassInputLayout.isEnabled = false
+
+            val dimensionConditionInputLayout =
+                (dimensionConditionEditText.parent as ViewGroup).parent as TextInputLayout
+            dimensionConditionInputLayout.isEnabled = false
+
+
+            galleryAdapter.disableAllViews()
+            gallerySelectButton.isEnabled = false
+
+            linkAdapter.disableAllViews()
+            linkAddButton.isEnabled = false
+        }
+
+
     }
 
     private fun getDetailedData(): HashMap<String, Any?> {
@@ -332,26 +562,45 @@ class UpsertActivity : AppCompatActivity() {
 
     }
 
-    private fun addArtefactDBEntry(
+    private fun upsertArtefactDBEntry(
         basicData: HashMap<String, Any?>,
         detailedData: HashMap<String, Any?>
     ) {
-        DB.createBasicArtefact(basicData).addOnSuccessListener { documentRef ->
-            detailedData["artefact_id"] = documentRef.id.toString()
+        if (mode == UpsertMode.INSERT) {
+            DB.createBasicArtefact(basicData).addOnSuccessListener { documentRef ->
+                detailedData["artefact_id"] = documentRef.id.toString()
+                DB.createArtefactDetails(detailedData)
+                    .addOnSuccessListener {
+                        val intent = Intent(this, InformationActivity::class.java)
+                        intent.putExtra("artefact_name", basicData["title"].toString())
+                        intent.putExtra("artefact_id", documentRef.id)
 
-            DB.createArtefactDetails(detailedData).addOnSuccessListener {
-                val intent = Intent(this, InformationActivity::class.java)
-                intent.putExtra("artefact_name", basicData["title"].toString())
-                intent.putExtra("artefact_id", documentRef.id)
+                        startActivity(intent)
 
-                startActivity(intent)
+                    }.addOnFailureListener { exception ->
+                        Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                    }
 
             }.addOnFailureListener { exception ->
                 Misc.displaySnackBar(constraintLayout, exception.message.toString())
             }
+        } else if (mode == UpsertMode.UPDATE) {
+            DB.updateBasicArtefact(artefactID.toString(), basicData)
+                .addOnSuccessListener { documentRef ->
+                    DB.updateArtefactDetails(artefactID.toString(), detailedData)
+                        .addOnSuccessListener {
+                            val intent = Intent(this, InformationActivity::class.java)
+                            intent.putExtra("artefact_name", basicData["title"].toString())
+                            intent.putExtra("artefact_id", artefactID)
 
-        }.addOnFailureListener { exception ->
-            Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                            startActivity(intent)
+
+                        }.addOnFailureListener { exception ->
+                            Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                        }
+                }.addOnFailureListener { exception ->
+                    Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                }
         }
     }
 
@@ -391,6 +640,18 @@ class UpsertActivity : AppCompatActivity() {
             "Africa" -> "AF"
             "Oceania" -> "OC"
             else -> "UN"
+        }
+    }
+
+    private fun getContinentName(continentCode: String): String {
+        return when (continentCode) {
+            "AS" -> "Asia"
+            "EU" -> "Europe"
+            "NA" -> "North America"
+            "SA" -> "South America"
+            "AF" -> "Africa"
+            "OC" -> "Oceania"
+            else -> "Other/Unknown"
         }
     }
 
