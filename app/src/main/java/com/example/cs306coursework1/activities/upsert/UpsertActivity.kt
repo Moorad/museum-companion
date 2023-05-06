@@ -21,7 +21,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
 import com.example.cs306coursework1.activities.information.InformationActivity
+import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.data.UpsertMode
+import com.example.cs306coursework1.data.UserSingleton
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
 import com.example.cs306coursework1.helpers.Storage
@@ -33,7 +35,6 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.Timestamp
 
 class UpsertActivity : AppCompatActivity() {
-    private lateinit var museumID: String
     private var mode: UpsertMode? = null
     private var artefactID: String? = null
 
@@ -86,7 +87,6 @@ class UpsertActivity : AppCompatActivity() {
         setContentView(R.layout.activity_upsert)
 
         mode = UpsertMode.INSERT
-        museumID = "R3wYiI9r3XVsUbhA2wAN"
 
         mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("mode", UpsertMode::class.java)
@@ -94,18 +94,11 @@ class UpsertActivity : AppCompatActivity() {
             intent.getSerializableExtra("mode") as UpsertMode?
         }
 
-        Log.println(Log.INFO, "mode", mode.toString())
+        Log.println(Log.INFO, "user", UserSingleton.getAccountType().toString())
 
         if (mode == UpsertMode.UPDATE || mode == UpsertMode.VIEW) {
             artefactID = intent.getStringExtra("artefact_id")
         }
-
-        Log.println(
-            Log.INFO,
-            "mode",
-            mode.toString()
-        )
-        Log.println(Log.INFO, "artefact_id", artefactID.toString())
 
         setupViews()
         setupTagRecyclerView()
@@ -174,7 +167,6 @@ class UpsertActivity : AppCompatActivity() {
 
         if (mode == UpsertMode.UPDATE) {
             toolbar.title = "Edit artefact"
-            submitButton.text = "Update"
         } else if (mode == UpsertMode.VIEW) {
             toolbar.title = "View artefact"
             submitButton.visibility = View.GONE
@@ -183,9 +175,11 @@ class UpsertActivity : AppCompatActivity() {
     }
 
     private fun getBasicData(): HashMap<String, Any?> {
+        val submitAsApproved = UserSingleton.getAccountType() == AccountType.CURATOR
+
         return hashMapOf(
-            "museum_id" to museumID,
-            "isApproved" to false,
+            "museum_id" to UserSingleton.getSelectedMuseumID().toString(),
+            "isApproved" to submitAsApproved,
             "title" to titleEditText.text.toString(),
             "short_desc" to shortDescEditText.text.toString(),
             "label" to labelEditText.text.toString(),
@@ -567,16 +561,31 @@ class UpsertActivity : AppCompatActivity() {
         detailedData: HashMap<String, Any?>
     ) {
         if (mode == UpsertMode.INSERT) {
-            DB.createBasicArtefact(basicData).addOnSuccessListener { documentRef ->
-                detailedData["artefact_id"] = documentRef.id.toString()
+            DB.createBasicArtefact(basicData).addOnSuccessListener { docBasicRef ->
+                detailedData["artefact_id"] = docBasicRef.id
                 DB.createArtefactDetails(detailedData)
-                    .addOnSuccessListener {
-                        val intent = Intent(this, InformationActivity::class.java)
-                        intent.putExtra("artefact_name", basicData["title"].toString())
-                        intent.putExtra("artefact_id", documentRef.id)
+                    .addOnSuccessListener { docDetailedRef ->
+                        var status = if (UserSingleton.getAccountType() == AccountType.CURATOR) {
+                            "approved"
+                        } else {
+                            "pending"
+                        }
+                        val submissionData: HashMap<String, Any?> = hashMapOf(
+                            "artefact_id" to docBasicRef.id,
+                            "created_by" to UserSingleton.getID(),
+                            "last_updated" to Timestamp.now(),
+                            "museum_id" to UserSingleton.getSelectedMuseumID().toString(),
+                            "status" to status
+                        )
 
-                        startActivity(intent)
-
+                        DB.createSubmission(submissionData).addOnSuccessListener {
+                            val intent = Intent(this, InformationActivity::class.java)
+                            intent.putExtra("artefact_name", basicData["title"].toString())
+                            intent.putExtra("artefact_id", docBasicRef.id)
+                            startActivity(intent)
+                        }.addOnFailureListener { exception ->
+                            Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                        }
                     }.addOnFailureListener { exception ->
                         Misc.displaySnackBar(constraintLayout, exception.message.toString())
                     }
@@ -586,15 +595,32 @@ class UpsertActivity : AppCompatActivity() {
             }
         } else if (mode == UpsertMode.UPDATE) {
             DB.updateBasicArtefact(artefactID.toString(), basicData)
-                .addOnSuccessListener { documentRef ->
+                .addOnSuccessListener {
                     DB.updateArtefactDetails(artefactID.toString(), detailedData)
                         .addOnSuccessListener {
-                            val intent = Intent(this, InformationActivity::class.java)
-                            intent.putExtra("artefact_name", basicData["title"].toString())
-                            intent.putExtra("artefact_id", artefactID)
 
-                            startActivity(intent)
+                            var status =
+                                if (UserSingleton.getAccountType() == AccountType.CURATOR) {
+                                    "approved"
+                                } else {
+                                    "pending"
+                                }
+                            val submissionData: HashMap<String, Any?> = hashMapOf(
+                                "artefact_id" to artefactID.toString(),
+                                "created_by" to UserSingleton.getID(),
+                                "last_updated" to Timestamp.now(),
+                                "museum_id" to UserSingleton.getSelectedMuseumID().toString(),
+                                "status" to status
+                            )
 
+                            DB.updateSubmissions(submissionData).addOnSuccessListener {
+                                val intent = Intent(this, InformationActivity::class.java)
+                                intent.putExtra("artefact_name", basicData["title"].toString())
+                                intent.putExtra("artefact_id", artefactID.toString())
+                                startActivity(intent)
+                            }.addOnFailureListener { exception ->
+                                Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                            }
                         }.addOnFailureListener { exception ->
                             Misc.displaySnackBar(constraintLayout, exception.message.toString())
                         }

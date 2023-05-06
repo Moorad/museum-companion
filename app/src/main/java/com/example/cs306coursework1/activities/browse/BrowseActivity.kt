@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import com.example.cs306coursework1.R
 import com.example.cs306coursework1.activities.submission.SubmissionsActivity
 import com.example.cs306coursework1.data.MuseumDetails
-import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.helpers.Misc
 import com.example.cs306coursework1.activities.login.LoginActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,8 +21,6 @@ class BrowseActivity : AppCompatActivity() {
     private var auth = Firebase.auth
     private var isMapView = true
 
-    private var museumDetails: MuseumDetails? = null
-
     lateinit var submissionActivityIntent: Intent
     lateinit var loginActivityIntent: Intent
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,14 +31,6 @@ class BrowseActivity : AppCompatActivity() {
 
         loginActivityIntent = Intent(this, LoginActivity::class.java)
         submissionActivityIntent = Intent(this, SubmissionsActivity::class.java)
-
-        val userDetails =
-            Misc.getParcelableFromIntent(intent, "user_details", UserDetails::class.java)
-        museumDetails =
-            Misc.getParcelableFromIntent(intent, "museum_details", MuseumDetails::class.java)
-
-        Log.println(Log.INFO, "user_details", userDetails.toString())
-        Log.println(Log.INFO, "museum_details", museumDetails.toString())
 
 
         val mapFragment = MapFragment()
@@ -73,7 +62,6 @@ class BrowseActivity : AppCompatActivity() {
                     true
                 }
                 R.id.action_submissions -> {
-                    submissionActivityIntent.putExtra("user_details", userDetails)
                     startActivity(submissionActivityIntent)
                     overridePendingTransition(0, 0)
                     true
@@ -107,9 +95,5 @@ class BrowseActivity : AppCompatActivity() {
         transaction.replace(R.id.flFragment, fragment)
         transaction.addToBackStack(null);
         transaction.commit()
-    }
-
-    fun getMuseumDetails(): MuseumDetails? {
-        return this.museumDetails
     }
 }

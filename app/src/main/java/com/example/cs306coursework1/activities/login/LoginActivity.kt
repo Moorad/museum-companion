@@ -8,11 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.cs306coursework1.*
-import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
 import com.example.cs306coursework1.activities.museum_select.MuseumSelectActivity
+import com.example.cs306coursework1.data.UserSingleton
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -47,10 +47,8 @@ class LoginActivity : AppCompatActivity() {
 
         // Go to main activity if guest button was clicked
         guestOptionButton.setOnClickListener {
-            museumsActivityIntent.putExtra(
-                "user_details",
-                UserDetails(null, "Guest user", null, AccountType.GUEST)
-            )
+            UserSingleton.setUsername("Guest user")
+            UserSingleton.setAccountType(AccountType.GUEST)
             startActivity(museumsActivityIntent)
         }
 
@@ -82,14 +80,12 @@ class LoginActivity : AppCompatActivity() {
         DB.getUserByUID(currentUser?.uid.toString())
             .addOnSuccessListener { documents ->
                 val doc = documents.first()
-                museumsActivityIntent.putExtra(
-                    "user_details",
-                    UserDetails(
-                        currentUser?.uid.toString(),
-                        doc.data["name"].toString(),
-                        currentUser?.email.toString(),
-                        AccountType.getTypeFromString(doc.data["type"].toString())
-                    )
+
+                UserSingleton.setObject(
+                    currentUser?.uid.toString(),
+                    doc.data["name"].toString(),
+                    currentUser?.email.toString(),
+                    AccountType.getTypeFromString(doc.data["type"].toString())
                 )
 
                 startActivity(museumsActivityIntent)

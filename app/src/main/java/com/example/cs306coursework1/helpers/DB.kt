@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -104,7 +105,6 @@ class DB {
                     taskCompletionSource.setException(exception)
                 }
 
-
             return taskCompletionSource.task
         }
 
@@ -112,14 +112,26 @@ class DB {
             val taskCompletionSource = TaskCompletionSource<Void>()
 
             db.collection("artefact_details").whereEqualTo("artefact_id", artefact_id).get()
-                .addOnSuccessListener {
-                    val docRef = it.first().reference.id
+                .addOnSuccessListener { detailsRefs ->
+                    val docRef = detailsRefs.first().reference.id
 
                     db.collection("artefact_details").document(docRef).delete()
                         .addOnSuccessListener {
                             db.collection("artefacts").document(artefact_id).delete()
                                 .addOnSuccessListener {
-                                    taskCompletionSource.setResult(null)
+                                    db.collection("submissions")
+                                        .whereEqualTo("artefact_id", artefact_id).get()
+                                        .addOnSuccessListener { submissionRefs ->
+                                            val submissionRef = submissionRefs.first().reference.id
+                                            db.collection("submissions").document(submissionRef)
+                                                .delete().addOnSuccessListener {
+                                                    taskCompletionSource.setResult(null)
+                                                }.addOnFailureListener { exception ->
+                                                    taskCompletionSource.setException(exception)
+                                                }
+                                        }.addOnFailureListener { exception ->
+                                            taskCompletionSource.setException(exception)
+                                        }
                                 }.addOnFailureListener { exception ->
                                     taskCompletionSource.setException(exception)
                                 }
@@ -133,9 +145,44 @@ class DB {
             return taskCompletionSource.task
         }
 
-        fun getSubmissionsByStatus(status: SubmissionType): Task<QuerySnapshot> {
+        fun getSubmissionsByStatus(
+            status: SubmissionType,
+            museumID: String,
+            userID: String?
+        ): Task<QuerySnapshot> {
+
+            if (userID != null) {
+                return db.collection("submissions")
+                    .whereEqualTo("museum_id", museumID)
+                    .whereEqualTo("status", status.toString().lowercase())
+                    .whereEqualTo("created_by", userID.toString()).get()
+            }
+
             return db.collection("submissions")
+                .whereEqualTo("museum_id", museumID)
                 .whereEqualTo("status", status.toString().lowercase()).get()
+        }
+
+        fun createSubmission(data: HashMap<String, Any?>): Task<DocumentReference> {
+            return db.collection("submissions").add(data)
+        }
+
+        fun updateSubmissions(data: HashMap<String, Any?>): Task<Void> {
+            val taskCompletionSource = TaskCompletionSource<Void>()
+
+            db.collection("submissions").whereEqualTo("artefact_id", data["artefact_id"].toString())
+                .get().addOnSuccessListener {
+                    val doc = it.first()
+                    db.collection("submissions").document(doc.id).update(data)
+                        .addOnSuccessListener {
+                            taskCompletionSource.setResult(null);
+                        }.addOnFailureListener { exception ->
+                            taskCompletionSource.setException(exception)
+                        }
+                }.addOnFailureListener { exception ->
+                    taskCompletionSource.setException(exception)
+                }
+            return taskCompletionSource.task
         }
     }
 }

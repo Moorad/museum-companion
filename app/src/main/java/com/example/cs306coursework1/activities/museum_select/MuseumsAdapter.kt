@@ -10,14 +10,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.*
 import com.example.cs306coursework1.activities.browse.BrowseActivity
-import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.data.MuseumDetails
+import com.example.cs306coursework1.data.UserSingleton
 
 class MuseumsAdapter(
     private val context: Context,
-    private val cardArrayList: ArrayList<MuseumsModal>,
-    private val userDetails: UserDetails?
+    private val cardArrayList: ArrayList<MuseumsModal>
 ) :
     RecyclerView.Adapter<MuseumsAdapter.ViewHolder>() {
 
@@ -49,11 +48,7 @@ class MuseumsAdapter(
         holder.descriptionView.text = info.getDescription()
 
         // If the user is curator, show the edit buttons
-        if (userDetails?.accountType != null && AccountType.isEqual(
-                userDetails.accountType,
-                AccountType.CURATOR
-            )
-        ) {
+        if (UserSingleton.getAccountType() == AccountType.CURATOR) {
             /* TODO: check whether the museum belongs to the user
                 if it does then show the edit button, otherwise keep
                 it hidden */
@@ -63,15 +58,8 @@ class MuseumsAdapter(
         holder.visitButtonView.setOnClickListener {
             val browseActivityIntent = Intent(context, BrowseActivity::class.java)
 
-            val museumDetails = MuseumDetails(
-                info.getID(),
-                info.getName(),
-                info.getDescription(),
-                info.getCuratorName()
-            )
-
-            browseActivityIntent.putExtra("user_details", userDetails)
-            browseActivityIntent.putExtra("museum_details", museumDetails)
+            UserSingleton.setSelectedMuseumID(info.getID())
+            UserSingleton.setSelectedMuseumName(info.getName())
             context.startActivity(browseActivityIntent)
         }
     }

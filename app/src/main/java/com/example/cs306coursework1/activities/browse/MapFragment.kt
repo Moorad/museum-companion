@@ -13,6 +13,7 @@ import com.example.cs306coursework1.R
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
 import com.example.cs306coursework1.activities.information.InformationActivity
+import com.example.cs306coursework1.data.UserSingleton
 import com.google.android.material.textfield.TextInputEditText
 
 class MapFragment : Fragment() {
@@ -26,10 +27,9 @@ class MapFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
         val browseActivity = activity as BrowseActivity
-        val museumDetails = browseActivity.getMuseumDetails()
 
         val museumNameView = view.findViewById<TextView>(R.id.museumName)
-        museumNameView.text = museumDetails?.name.toString()
+        museumNameView.text = UserSingleton.getSelectedMuseumName().toString()
 
         val artefactNumInput = view.findViewById<TextInputEditText>(R.id.artefactNumInput)
 
@@ -42,7 +42,7 @@ class MapFragment : Fragment() {
                 Misc.closeKeyboard(view)
 
                 DB.getArtefactByProperty(
-                    museumDetails?.id.toString(),
+                    UserSingleton.getSelectedMuseumID().toString(),
                     "label",
                     artefactNumInput.text.toString()
                 ).addOnSuccessListener { documents ->

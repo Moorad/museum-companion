@@ -16,7 +16,7 @@ import com.example.cs306coursework1.activities.submission.fragments.SubmissionMo
 import com.example.cs306coursework1.activities.upsert.UpsertActivity
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.data.UpsertMode
-import com.example.cs306coursework1.data.UserDetails
+import com.example.cs306coursework1.data.UserSingleton
 import com.example.cs306coursework1.helpers.Misc
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -32,11 +32,6 @@ class SubmissionsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submissions)
-
-        val userDetails =
-            Misc.getParcelableFromIntent(intent, "user_details", UserDetails::class.java)
-
-        Log.println(Log.INFO, "user", userDetails.toString())
 
         browseActivityIntent = Intent(this, BrowseActivity::class.java)
         upsertActivityIntent = Intent(this, UpsertActivity::class.java)
@@ -65,7 +60,7 @@ class SubmissionsActivity : AppCompatActivity() {
             }
         }
 
-        if (userDetails?.accountType != AccountType.GUEST) {
+        if (UserSingleton.getAccountType() != AccountType.GUEST) {
             toolbar.inflateMenu(R.menu.submission_activity_menu)
 
             toolbar.setOnMenuItemClickListener { item ->

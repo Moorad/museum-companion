@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.example.cs306coursework1.*
-import com.example.cs306coursework1.data.UserDetails
+import com.example.cs306coursework1.data.UserSingleton
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
@@ -77,14 +77,11 @@ class LoginFragment : Fragment() {
 
                         val doc = documents.first()
 
-                        museumsActivityIntent.putExtra(
-                            "user_details",
-                            UserDetails(
-                                doc.data["uid"].toString(),
-                                doc.data["name"].toString(),
-                                emailText.text.toString(),
-                                AccountType.getTypeFromString(doc.data["type"].toString())
-                            )
+                        UserSingleton.setObject(
+                            doc.data["uid"].toString(),
+                            doc.data["name"].toString(),
+                            emailText.text.toString(),
+                            AccountType.getTypeFromString(doc.data["type"].toString())
                         )
 
                         startActivity(museumsActivityIntent)

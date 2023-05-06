@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Parcelable
+import android.text.format.DateUtils
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -12,6 +14,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
+
 
 class Misc {
     companion object {
@@ -72,6 +79,20 @@ class Misc {
             hashMap: QueryDocumentSnapshot, entry: String
         ): Boolean {
             return hashMap.get(entry) != null && hashMap.get(entry) != ""
+        }
+
+        fun toTimeAgo(date: Date): String? {
+            try {
+                val now = System.currentTimeMillis()
+                val ago =
+                    DateUtils.getRelativeTimeSpanString(date.time, now, DateUtils.MINUTE_IN_MILLIS)
+
+                return ago.toString()
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+
+            return null
         }
 
     }

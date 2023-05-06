@@ -5,6 +5,7 @@ class SubmissionModal {
     private var modelImage: Int = 0
     private var modelLevel: Float = 0.0F
     private var artefactID: String? = null
+    private var lastUpdated: String? = null
 
     fun getName(): String {
         return modelName.toString()
@@ -13,6 +14,15 @@ class SubmissionModal {
     fun setName(name: String) {
         this.modelName = name
     }
+
+    fun getLastUpdated(): String {
+        return lastUpdated.toString()
+    }
+
+    fun setLastUpdated(lastUpdated: String) {
+        this.lastUpdated = lastUpdated
+    }
+
 
     fun getImage(): Int {
         return modelImage

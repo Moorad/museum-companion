@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
-import com.example.cs306coursework1.data.UserDetails
+import com.example.cs306coursework1.data.UserSingleton
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
 import com.google.android.material.appbar.MaterialToolbar
@@ -30,12 +30,9 @@ class MuseumSelectActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val userDetails =
-            Misc.getParcelableFromIntent(intent, "user_details", UserDetails::class.java)
-
         Misc.displaySnackBar(
             constraintLayout,
-            "Signed in as " + userDetails?.username.toString(),
+            "Signed in as " + UserSingleton.getUsername(),
         )
 
         DB.getAvailableMuseums().addOnSuccessListener { documents ->
@@ -49,7 +46,7 @@ class MuseumSelectActivity : AppCompatActivity() {
 
             val cardArrayList = populateList(documents.documents)
 
-            val adapter = MuseumsAdapter(this, cardArrayList, userDetails)
+            val adapter = MuseumsAdapter(this, cardArrayList)
             recyclerView.adapter = adapter
         }.addOnFailureListener { exception ->
             Misc.displaySnackBar(constraintLayout, exception.message.toString())

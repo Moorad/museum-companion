@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
+import com.example.cs306coursework1.data.UserSingleton
 import com.example.cs306coursework1.helpers.DB
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
@@ -29,22 +30,22 @@ class ListFragment : Fragment() {
         recyclerView.layoutManager = layoutManager
 
         val browseActivity = activity as BrowseActivity
-        val museumDetails = browseActivity.getMuseumDetails()
 
-        if (museumDetails != null) {
-            DB.getArtefactsOfMuseum(museumDetails.id).addOnSuccessListener { documents ->
-                // If there is no museums display the "No museums added" text
-                // and skip the reset of this code
-                if (documents.size() == 0) {
-                    noArtefactsView.visibility = View.VISIBLE
-                    return@addOnSuccessListener
+        if (UserSingleton.getSelectedMuseumID() != null) {
+            DB.getArtefactsOfMuseum(UserSingleton.getSelectedMuseumID().toString())
+                .addOnSuccessListener { documents ->
+                    // If there is no museums display the "No museums added" text
+                    // and skip the reset of this code
+                    if (documents.size() == 0) {
+                        noArtefactsView.visibility = View.VISIBLE
+                        return@addOnSuccessListener
+                    }
+
+                    val cardArrayList = populateList(documents.documents)
+
+                    val adapter = this.context?.let { ListAdapter(it, cardArrayList) }
+                    recyclerView.adapter = adapter
                 }
-
-                val cardArrayList = populateList(documents.documents)
-
-                val adapter = this.context?.let { ListAdapter(it, cardArrayList) }
-                recyclerView.adapter = adapter
-            }
         }
 
         return view

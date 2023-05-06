@@ -9,11 +9,11 @@ import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import com.example.cs306coursework1.*
-import com.example.cs306coursework1.data.UserDetails
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
 import com.example.cs306coursework1.activities.museum_select.MuseumSelectActivity
+import com.example.cs306coursework1.data.UserSingleton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -83,16 +83,14 @@ class RegisterFragment : Fragment() {
                     usernameText.text.toString(),
                     AccountType.getTypeFromString(accountTypeSelect.text.toString())
                 ).addOnSuccessListener {
-                    museumsActivityIntent.putExtra(
-                        "user_details",
-                        UserDetails(
-                            task.result.user?.uid.toString(),
-                            usernameText.text.toString(),
-                            emailText.text.toString(),
-                            AccountType.getTypeFromString(accountTypeSelect.text.toString())
-                        )
-                    )
 
+                    UserSingleton.setObject(
+                        task.result.user?.uid.toString(),
+                        usernameText.text.toString(),
+                        emailText.text.toString(),
+                        AccountType.getTypeFromString(accountTypeSelect.text.toString())
+                    )
+                    
                     startActivity(museumsActivityIntent)
                 }
                     .addOnFailureListener { exception ->
