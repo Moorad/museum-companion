@@ -29,8 +29,6 @@ class ListFragment : Fragment() {
         val layoutManager = LinearLayoutManager(this.context)
         recyclerView.layoutManager = layoutManager
 
-        val browseActivity = activity as BrowseActivity
-
         if (UserSingleton.getSelectedMuseumID() != null) {
             DB.getArtefactsOfMuseum(UserSingleton.getSelectedMuseumID().toString())
                 .addOnSuccessListener { documents ->

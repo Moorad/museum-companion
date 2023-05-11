@@ -2,10 +2,19 @@ package com.example.cs306coursework1.activities.submission.fragments
 
 class SubmissionModal {
     var modelName: String? = null;
+    private var modelUserID: String? = null
     private var modelImage: Int = 0
-    private var modelLevel: Float = 0.0F
+    private var modelLevel: Double = 0.0
     private var artefactID: String? = null
     private var lastUpdated: String? = null
+
+    fun getUserID(): String {
+        return modelUserID.toString()
+    }
+
+    fun setUserID(id: String) {
+        this.modelUserID = id
+    }
 
     fun getName(): String {
         return modelName.toString()
@@ -32,11 +41,11 @@ class SubmissionModal {
         this.modelImage = image_drawable
     }
 
-    fun getLevel(): Float {
+    fun getLevel(): Double {
         return modelLevel
     }
 
-    fun setLevel(level: Float) {
+    fun setLevel(level: Double) {
         this.modelLevel = level
     }
 

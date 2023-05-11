@@ -115,127 +115,133 @@ class InformationActivity : AppCompatActivity() {
         }
 
 
-        DB.getArtefactDetailsByID(artefactID).addOnSuccessListener { documents ->
-            val details = documents.first()
+        DB.getArtefactBasicByID(artefactID).addOnSuccessListener { doc ->
+            toolbarLayout.title = doc["title"].toString()
 
-            // Set title of artefact in toolbar
-            toolbarLayout.title = artefactName
+            DB.getArtefactDetailsByID(artefactID).addOnSuccessListener { documents ->
+                val details = documents.first()
 
-            // Display hero image
-            if (Misc.existsIn(details, "hero_image")) {
-                Misc.setImageFromURL(details["hero_image"].toString(), heroImage)
-            } else {
-                // Hide if the field is not present
-                heroImage.visibility = View.GONE
-            }
+                // Set title of artefact in toolbar
 
 
-            // Set description
-            if (Misc.existsIn(details, "description")) {
-                val descriptionDetails = details["description"] as Map<String, Any>
-
-
-                // Set description text
-                if (Misc.existsIn(descriptionDetails, "text")) {
-                    descriptionText.text = descriptionDetails["text"].toString()
+                // Display hero image
+                if (Misc.existsIn(details, "hero_image")) {
+                    Misc.setImageFromURL(details["hero_image"].toString(), heroImage)
                 } else {
-                    descriptionText.visibility = View.GONE
+                    // Hide if the field is not present
+                    heroImage.visibility = View.GONE
                 }
 
-                // Set wiki button link
-                if (Misc.existsIn(descriptionDetails, "wikipedia_url")) {
-                    descriptionWikiButton.setOnClickListener {
-                        val browserIntent =
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse(descriptionDetails["wikipedia_url"].toString())
-                            )
 
-                        startActivity(browserIntent)
+                // Set description
+                if (Misc.existsIn(details, "description")) {
+                    val descriptionDetails = details["description"] as Map<String, Any>
+
+
+                    // Set description text
+                    if (Misc.existsIn(descriptionDetails, "text")) {
+                        descriptionText.text = descriptionDetails["text"].toString()
+                    } else {
+                        descriptionText.visibility = View.GONE
+                    }
+
+                    // Set wiki button link
+                    if (Misc.existsIn(descriptionDetails, "wikipedia_url")) {
+                        descriptionWikiButton.setOnClickListener {
+                            val browserIntent =
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(descriptionDetails["wikipedia_url"].toString())
+                                )
+
+                            startActivity(browserIntent)
+                        }
+                    } else {
+                        descriptionWikiButton.visibility = View.GONE
                     }
                 } else {
-                    descriptionWikiButton.visibility = View.GONE
+                    // Hide if the field is not present
+                    findViewById<LinearLayout>(R.id.descriptionContainer).visibility = View.GONE
                 }
-            } else {
-                // Hide if the field is not present
-                findViewById<LinearLayout>(R.id.descriptionContainer).visibility = View.GONE
+
+                // Set origin of item
+                if (Misc.existsIn(details, "history")) {
+                    val history = details["history"] as Map<String, String>
+                    originCountryName.text = history["origin_country"].toString()
+
+                    originDescription.text =
+                        "The " + artefactName + " was first invented by " + history["company_name"].toString() + " in " + history["release_date"] + "."
+
+                    originContinentImage.setImageResource(getContinentDrawable(history["continent"].toString()))
+                } else {
+                    findViewById<LinearLayout>(R.id.originContainer).visibility = View.GONE
+                }
+
+                // Set dimensions of item
+                if (Misc.existsIn(details, "dimensions")) {
+                    val dimensions = details["dimensions"] as Map<String, Float>
+
+                    if (Misc.existsIn(dimensions, "width")) {
+                        dimensionWidthView.text =
+                            formatMeasure("Width", dimensions["width"].toString(), "cm")
+                        dimensionWidthView.visibility = View.VISIBLE
+                    }
+
+                    if (Misc.existsIn(dimensions, "height")) {
+                        dimensionHeightView.text =
+                            formatMeasure("Height", dimensions["height"].toString(), "cm")
+                        dimensionHeightView.visibility = View.VISIBLE
+                    }
+
+                    if (Misc.existsIn(dimensions, "depth")) {
+                        dimensionDepthView.text =
+                            formatMeasure("Depth", dimensions["depth"].toString(), "cm")
+                        dimensionDepthView.visibility = View.VISIBLE
+                    }
+
+                    if (Misc.existsIn(dimensions, "mass")) {
+                        dimensionMassView.text =
+                            formatMeasure("Mass", dimensions["mass"].toString(), "kg")
+                        dimensionMassView.visibility = View.VISIBLE
+                    }
+
+                    if (Misc.existsIn(dimensions, "condition")) {
+                        dimensionConditionView.text =
+                            formatMeasure("Condition", dimensions["condition"].toString(), null)
+                        dimensionConditionView.visibility = View.VISIBLE
+                    }
+
+                } else {
+                    findViewById<LinearLayout>(R.id.dimensionsContainer).visibility = View.GONE
+                }
+
+
+                // Set gallery images
+                if (Misc.existsIn(details, "gallery")) {
+                    val imageURLs = details["gallery"] as ArrayList<String>
+                    val galleryLayoutManager = GridLayoutManager(this, 3)
+                    galleryRecyclerView.layoutManager = galleryLayoutManager
+                    val adapter = GalleryAdapter(imageURLs)
+                    galleryRecyclerView.adapter = adapter
+                } else {
+                    findViewById<LinearLayout>(R.id.galleryContainer).visibility = View.GONE
+                }
+
+                // Set related links
+                if (Misc.existsIn(details, "related_links")) {
+                    val links = details["related_links"] as ArrayList<Map<String, String>>
+                    val modals = populateLinks(links)
+                    val linksLayoutManager = LinearLayoutManager(this)
+                    linksRecyclerView.layoutManager = linksLayoutManager
+                    val linksAdapter = LinksAdapter(this, modals)
+                    linksRecyclerView.adapter = linksAdapter
+                } else {
+                    findViewById<LinearLayout>(R.id.linksContainer).visibility = View.GONE
+                }
+
+            }.addOnFailureListener { exception ->
+                Misc.displaySnackBar(containerLayout, exception.message.toString())
             }
-
-            // Set origin of item
-            if (Misc.existsIn(details, "history")) {
-                val history = details["history"] as Map<String, String>
-                originCountryName.text = history["origin_country"].toString()
-
-                originDescription.text =
-                    "The " + artefactName + " was first invented by " + history["company_name"].toString() + " in " + history["release_date"] + "."
-
-                originContinentImage.setImageResource(getContinentDrawable(history["continent"].toString()))
-            } else {
-                findViewById<LinearLayout>(R.id.originContainer).visibility = View.GONE
-            }
-
-            // Set dimensions of item
-            if (Misc.existsIn(details, "dimensions")) {
-                val dimensions = details["dimensions"] as Map<String, Float>
-
-                if (Misc.existsIn(dimensions, "width")) {
-                    dimensionWidthView.text =
-                        formatMeasure("Width", dimensions["width"].toString(), "cm")
-                    dimensionWidthView.visibility = View.VISIBLE
-                }
-
-                if (Misc.existsIn(dimensions, "height")) {
-                    dimensionHeightView.text =
-                        formatMeasure("Height", dimensions["height"].toString(), "cm")
-                    dimensionHeightView.visibility = View.VISIBLE
-                }
-
-                if (Misc.existsIn(dimensions, "depth")) {
-                    dimensionDepthView.text =
-                        formatMeasure("Depth", dimensions["depth"].toString(), "cm")
-                    dimensionDepthView.visibility = View.VISIBLE
-                }
-
-                if (Misc.existsIn(dimensions, "mass")) {
-                    dimensionMassView.text =
-                        formatMeasure("Mass", dimensions["mass"].toString(), "kg")
-                    dimensionMassView.visibility = View.VISIBLE
-                }
-
-                if (Misc.existsIn(dimensions, "condition")) {
-                    dimensionConditionView.text =
-                        formatMeasure("Condition", dimensions["condition"].toString(), null)
-                    dimensionConditionView.visibility = View.VISIBLE
-                }
-
-            } else {
-                findViewById<LinearLayout>(R.id.dimensionsContainer).visibility = View.GONE
-            }
-
-
-            // Set gallery images
-            if (Misc.existsIn(details, "gallery")) {
-                val imageURLs = details["gallery"] as ArrayList<String>
-                val galleryLayoutManager = GridLayoutManager(this, 3)
-                galleryRecyclerView.layoutManager = galleryLayoutManager
-                val adapter = GalleryAdapter(imageURLs)
-                galleryRecyclerView.adapter = adapter
-            } else {
-                findViewById<LinearLayout>(R.id.galleryContainer).visibility = View.GONE
-            }
-
-            // Set related links
-            if (Misc.existsIn(details, "related_links")) {
-                val links = details["related_links"] as ArrayList<Map<String, String>>
-                val modals = populateLinks(links)
-                val linksLayoutManager = LinearLayoutManager(this)
-                linksRecyclerView.layoutManager = linksLayoutManager
-                val linksAdapter = LinksAdapter(this, modals)
-                linksRecyclerView.adapter = linksAdapter
-            } else {
-                findViewById<LinearLayout>(R.id.linksContainer).visibility = View.GONE
-            }
-
         }.addOnFailureListener { exception ->
             Misc.displaySnackBar(containerLayout, exception.message.toString())
         }

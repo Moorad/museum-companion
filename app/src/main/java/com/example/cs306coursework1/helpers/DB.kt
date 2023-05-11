@@ -6,6 +6,7 @@ import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.data.SubmissionType
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
@@ -13,6 +14,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class DB {
     companion object {
@@ -31,13 +33,28 @@ class DB {
             name: String,
             accountType: AccountType
         ): Task<DocumentReference> {
-            val data = hashMapOf(
-                "uid" to uid,
-                "name" to name,
-                "type" to accountType.type
-            )
+            val taskCompletionSource = TaskCompletionSource<DocumentReference>()
+            Firebase.storage.reference.child("profile_images/default.png").downloadUrl.addOnSuccessListener { uri ->
+                val data = hashMapOf(
+                    "uid" to uid,
+                    "name" to name,
+                    "description" to "No description",
+                    "level" to 0.0F,
+                    "profile_image" to uri.toString(),
+                    "type" to accountType.type,
+                    "created_at" to Timestamp.now()
+                )
 
-            return db.collection("users").add(data)
+                db.collection("users").add(data).addOnSuccessListener { docRef ->
+                    taskCompletionSource.setResult(docRef)
+                }.addOnFailureListener { exception ->
+                    taskCompletionSource.setException(exception)
+                }
+            }.addOnFailureListener { exception ->
+                taskCompletionSource.setException(exception)
+            }
+
+            return taskCompletionSource.task
         }
 
         fun getAvailableMuseums(): Task<QuerySnapshot> {
@@ -147,13 +164,17 @@ class DB {
 
         fun getSubmissionsByStatus(
             status: SubmissionType,
-            museumID: String,
+            museumID: String?,
             userID: String?
         ): Task<QuerySnapshot> {
 
-            if (userID != null) {
+            if (userID != null && museumID != null) {
                 return db.collection("submissions")
                     .whereEqualTo("museum_id", museumID)
+                    .whereEqualTo("status", status.toString().lowercase())
+                    .whereEqualTo("created_by", userID.toString()).get()
+            } else if (userID != null) {
+                return db.collection("submissions")
                     .whereEqualTo("status", status.toString().lowercase())
                     .whereEqualTo("created_by", userID.toString()).get()
             }
@@ -182,6 +203,24 @@ class DB {
                 }.addOnFailureListener { exception ->
                     taskCompletionSource.setException(exception)
                 }
+            return taskCompletionSource.task
+        }
+
+        fun updateUser(uid: String, data: HashMap<String, Any?>): Task<Void> {
+            val taskCompletionSource = TaskCompletionSource<Void>()
+
+            db.collection("users").whereEqualTo("uid", uid).get().addOnSuccessListener { docRefs ->
+                val doc = docRefs.first()
+                db.collection("users").document(doc.reference.id).update(data)
+                    .addOnSuccessListener {
+                        taskCompletionSource.setResult(null)
+                    }.addOnFailureListener { exception ->
+                        taskCompletionSource.setException(exception)
+                    }
+            }.addOnFailureListener { exception ->
+                taskCompletionSource.setException(exception)
+            }
+
             return taskCompletionSource.task
         }
     }

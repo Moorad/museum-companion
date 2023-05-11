@@ -61,7 +61,12 @@ class PendingFragment : Fragment() {
 
                     val layoutManager = LinearLayoutManager(view.context)
                     recyclerView.layoutManager = layoutManager
-                    val mAdapter = SubmissionAdapter(submissions, view.context, frameLayout)
+                    val mAdapter = SubmissionAdapter(
+                        submissions,
+                        SubmissionType.PENDING,
+                        view.context,
+                        frameLayout
+                    )
                     recyclerView.adapter = mAdapter
                 }
             } else {
@@ -78,29 +83,35 @@ class PendingFragment : Fragment() {
         return view
     }
 
-    private fun getSubmissions(
-        users: QuerySnapshot,
-        docs: QuerySnapshot
-    ): ArrayList<SubmissionModal> {
-        val models = ArrayList<SubmissionModal>()
 
-        docs.sortedByDescending { (it["last_updated"] as Timestamp).toDate().time }.forEach { doc ->
-            val model = SubmissionModal()
-            val userName =
-                users.find { user -> user["uid"] == doc["created_by"] }?.get("name").toString()
-            model.setName(userName)
-            model.setLastUpdated(
-                Misc.toTimeAgo(
-                    (doc["last_updated"] as Timestamp).toDate()
-                ).toString()
-            )
-            model.setImage(R.drawable.ah)
-            model.setLevel(1.5F)
-            model.setArtefactID(doc["artefact_id"].toString())
-            models.add(model)
+    companion object {
+        fun getSubmissions(
+            users: QuerySnapshot,
+            docs: QuerySnapshot
+        ): ArrayList<SubmissionModal> {
+            val models = ArrayList<SubmissionModal>()
+
+            docs.sortedByDescending { (it["last_updated"] as Timestamp).toDate().time }
+                .forEach { doc ->
+                    val user = users.find { user -> user["uid"] == doc["created_by"] }
+                    val model = SubmissionModal()
+                    model.setUserID(user?.get("uid").toString())
+                    model.setName(
+                        user?.get("name")
+                            .toString()
+                    )
+                    model.setLastUpdated(
+                        Misc.toTimeAgo(
+                            (doc["last_updated"] as Timestamp).toDate()
+                        ).toString()
+                    )
+                    model.setImage(R.drawable.ah)
+                    model.setLevel(user?.get("level") as Double)
+                    model.setArtefactID(doc["artefact_id"].toString())
+                    models.add(model)
+                }
+
+            return models
         }
-
-        return models
     }
-
 }

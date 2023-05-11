@@ -4,20 +4,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Parcelable
+import android.text.Html
+import android.text.Spanned
 import android.text.format.DateUtils
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.core.text.HtmlCompat
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.TimeZone
+import java.util.*
+import kotlin.math.round
 
 
 class Misc {
@@ -76,9 +77,15 @@ class Misc {
         }
 
         fun existsIn(
-            hashMap: QueryDocumentSnapshot, entry: String
+            hashMap: DocumentSnapshot, entry: String
         ): Boolean {
             return hashMap.get(entry) != null && hashMap.get(entry) != ""
+        }
+
+        fun boldText(text: String): Spanned {
+            var str = "<b>$text</b>"
+
+            return Html.fromHtml(str, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
 
         fun toTimeAgo(date: Date): String? {
@@ -95,5 +102,9 @@ class Misc {
             return null
         }
 
+        fun dpToPx(dp: Int, ctx: Context): Float {
+            val density: Float = ctx.resources.displayMetrics.density
+            return round(dp.toFloat() * density)
+        }
     }
 }

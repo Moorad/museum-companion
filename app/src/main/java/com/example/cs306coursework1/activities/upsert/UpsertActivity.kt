@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
 import com.example.cs306coursework1.activities.information.InformationActivity
 import com.example.cs306coursework1.data.AccountType
+import com.example.cs306coursework1.data.Constants
 import com.example.cs306coursework1.data.UpsertMode
 import com.example.cs306coursework1.data.UserSingleton
 import com.example.cs306coursework1.helpers.DB
@@ -309,8 +310,10 @@ class UpsertActivity : AppCompatActivity() {
             shortDescEditText.setText(doc["short_desc"].toString(), TextView.BufferType.EDITABLE)
             labelEditText.setText(doc["label"].toString(), TextView.BufferType.EDITABLE)
 
-            (doc["tags"] as ArrayList<String>).forEach { tag ->
-                tagAdapter.addItem(tag)
+            if (Misc.existsIn(doc, "tags")) {
+                (doc["tags"] as ArrayList<String>).forEach { tag ->
+                    tagAdapter.addItem(tag)
+                }
             }
 
         }.addOnFailureListener { exception ->
@@ -565,10 +568,13 @@ class UpsertActivity : AppCompatActivity() {
                 detailedData["artefact_id"] = docBasicRef.id
                 DB.createArtefactDetails(detailedData)
                     .addOnSuccessListener { docDetailedRef ->
-                        var status = if (UserSingleton.getAccountType() == AccountType.CURATOR) {
-                            "approved"
+                        var levelGain = Constants.SUBMISSION_LEVEL_GAIN
+                        var status = ""
+                        if (UserSingleton.getAccountType() == AccountType.CURATOR) {
+                            status = "approved"
+                            levelGain = Constants.CURATOR_SUBMISSION_LEVEL_GAIN
                         } else {
-                            "pending"
+                            status = "pending"
                         }
                         val submissionData: HashMap<String, Any?> = hashMapOf(
                             "artefact_id" to docBasicRef.id,
@@ -579,10 +585,26 @@ class UpsertActivity : AppCompatActivity() {
                         )
 
                         DB.createSubmission(submissionData).addOnSuccessListener {
-                            val intent = Intent(this, InformationActivity::class.java)
-                            intent.putExtra("artefact_name", basicData["title"].toString())
-                            intent.putExtra("artefact_id", docBasicRef.id)
-                            startActivity(intent)
+                            DB.getUserByUID(UserSingleton.getID()).addOnSuccessListener { docRefs ->
+                                val user = docRefs.first()
+
+                                val data: HashMap<String, Any?> = hashMapOf(
+                                    "level" to (user["level"] as Double) + levelGain
+                                )
+
+                                DB.updateUser(UserSingleton.getID(), data).addOnSuccessListener {
+                                    val intent = Intent(this, InformationActivity::class.java)
+                                    intent.putExtra("artefact_id", docBasicRef.id)
+                                    startActivity(intent)
+                                }.addOnFailureListener { exception ->
+                                    Misc.displaySnackBar(
+                                        constraintLayout,
+                                        exception.message.toString()
+                                    )
+                                }
+                            }.addOnFailureListener { exception ->
+                                Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                            }
                         }.addOnFailureListener { exception ->
                             Misc.displaySnackBar(constraintLayout, exception.message.toString())
                         }
@@ -615,7 +637,6 @@ class UpsertActivity : AppCompatActivity() {
 
                             DB.updateSubmissions(submissionData).addOnSuccessListener {
                                 val intent = Intent(this, InformationActivity::class.java)
-                                intent.putExtra("artefact_name", basicData["title"].toString())
                                 intent.putExtra("artefact_id", artefactID.toString())
                                 startActivity(intent)
                             }.addOnFailureListener { exception ->

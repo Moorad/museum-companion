@@ -68,6 +68,13 @@
 
 
     <Button
+        android:id="@+id/reapproveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_reapprove"
+        style="@style/Widget.Material3.Button.IconButton" />
+
+    <Button
         android:id="@+id/approveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,6 +93,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_edit"
+        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal" />
+
+    <Button
+        android:id="@+id/viewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_view"
         style="@style/Widget.Material3.Button.IconButton.Filled.Tonal" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

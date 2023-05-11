@@ -26,8 +26,6 @@ class MapFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
-        val browseActivity = activity as BrowseActivity
-
         val museumNameView = view.findViewById<TextView>(R.id.museumName)
         museumNameView.text = UserSingleton.getSelectedMuseumName().toString()
 
@@ -54,9 +52,7 @@ class MapFragment : Fragment() {
 
                     val doc = documents.first()
 
-                    infoActivityIntent.putExtra("artefact_id", doc.id.toString())
-                    infoActivityIntent.putExtra("artefact_name", doc["title"].toString())
-
+                    infoActivityIntent.putExtra("artefact_id", doc.id)
                     startActivity(infoActivityIntent)
                 }.addOnFailureListener { exception ->
                     Misc.displaySnackBar(view, exception.message.toString())

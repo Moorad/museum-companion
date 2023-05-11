@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.*
 import com.example.cs306coursework1.activities.browse.BrowseActivity
+import com.example.cs306coursework1.activities.main.MainActivity
 import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.data.MuseumDetails
 import com.example.cs306coursework1.data.UserSingleton
@@ -56,11 +57,12 @@ class MuseumsAdapter(
         }
 
         holder.visitButtonView.setOnClickListener {
-            val browseActivityIntent = Intent(context, BrowseActivity::class.java)
+//            val browseActivityIntent = Intent(context, BrowseActivity::class.java)
+            val mainActivityIntent = Intent(context, MainActivity::class.java)
 
             UserSingleton.setSelectedMuseumID(info.getID())
             UserSingleton.setSelectedMuseumName(info.getName())
-            context.startActivity(browseActivityIntent)
+            context.startActivity(mainActivityIntent)
         }
     }
 

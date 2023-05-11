@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
             app:collapsedTitleTextColor="@color/md_theme_light_onPrimaryContainer"
-            app:title="An Experimental Evaluation of Relocation Hardware 1970"
+            app:title="Loading..."
             app:expandedTitleTextColor="@color/md_theme_light_onPrimaryContainer"
             app:maxLines="2">
 

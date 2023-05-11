@@ -12,8 +12,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.cs306coursework1.R
+import com.example.cs306coursework1.activities.information.InformationActivity
 import com.example.cs306coursework1.activities.upsert.UpsertActivity
-import com.example.cs306coursework1.data.UpsertMode
+import com.example.cs306coursework1.data.*
 import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -21,6 +22,7 @@ import kotlin.math.floor
 
 class SubmissionAdapter(
     private val imageModeArrayList: ArrayList<SubmissionModal>,
+    private val mode: SubmissionType,
     private val context: Context,
     private val constraintLayout: View
 ) :
@@ -32,8 +34,10 @@ class SubmissionAdapter(
         var lastUpdatedView = itemView.findViewById<View>(R.id.lastUpdated) as TextView
         var levelTxtView = itemView.findViewById<View>(R.id.level) as TextView
         var levelProgressBar = itemView.findViewById<View>(R.id.level_progress) as ProgressBar
+        var reapproveButton = itemView.findViewById<View>(R.id.reapproveButton) as Button
         var approveButton = itemView.findViewById<View>(R.id.approveButton) as Button
         var denyButton = itemView.findViewById<View>(R.id.denyButton) as Button
+        var viewButton = itemView.findViewById<View>(R.id.viewButton) as Button
         var editButton = itemView.findViewById<View>(R.id.editButton) as Button
     }
 
@@ -62,69 +66,169 @@ class SubmissionAdapter(
         holder.levelTxtView.text = levelInt.toString()
         holder.levelProgressBar.progress = levelProgress
 
-        holder.approveButton.setOnClickListener {
-            MaterialAlertDialogBuilder(
-                context,
-                com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
-            )
-                .setTitle("You are about to approve this artefact")
-                .setIcon(R.drawable.ic_approve)
-                .setMessage("Are you sure you want to approve this artefact? You can update and delete this item later.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Approve") { _, _ ->
-                    val submissionData: HashMap<String, Any?> = hashMapOf(
-                        "artefact_id" to info.getArtefactID(),
-                        "status" to "approved"
-                    )
+        if (mode == SubmissionType.PENDING) {
+            holder.viewButton.visibility = View.GONE
+            holder.reapproveButton.visibility = View.GONE
 
-                    val artefactData: HashMap<String, Any?> = hashMapOf(
-                        "isApproved" to true
-                    )
+            if (UserSingleton.getAccountType() != AccountType.CURATOR) {
+                holder.approveButton.visibility = View.GONE
+                holder.denyButton.visibility = View.GONE
+            }
 
-                    DB.updateSubmissions(submissionData).addOnSuccessListener {
-                        DB.updateBasicArtefact(info.getArtefactID(), artefactData)
-                            .addOnSuccessListener {
-                                Misc.displaySnackBar(constraintLayout, "Approved successfully!")
-                            }.addOnFailureListener { exception ->
-                                Misc.displaySnackBar(constraintLayout, exception.message.toString())
-                            }
-                    }.addOnFailureListener { exception ->
-                        Misc.displaySnackBar(constraintLayout, exception.message.toString())
+            holder.approveButton.setOnClickListener {
+                MaterialAlertDialogBuilder(
+                    context,
+                    com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+                )
+                    .setTitle("You are about to approve this artefact")
+                    .setIcon(R.drawable.ic_approve)
+                    .setMessage("Are you sure you want to approve this artefact? You can update and delete this item later.")
+                    .setNegativeButton("Cancel", null)
+                    .setPositiveButton("Approve") { _, _ ->
+                        val submissionData: HashMap<String, Any?> = hashMapOf(
+                            "artefact_id" to info.getArtefactID(),
+                            "status" to "approved"
+                        )
+
+                        val artefactData: HashMap<String, Any?> = hashMapOf(
+                            "isApproved" to true
+                        )
+
+                        DB.updateSubmissions(submissionData).addOnSuccessListener {
+                            DB.updateBasicArtefact(info.getArtefactID(), artefactData)
+                                .addOnSuccessListener {
+                                    val data: HashMap<String, Any?> = hashMapOf(
+                                        "level" to info.getLevel() + Constants.APPROVE_LEVEL_GAIN
+                                    )
+                                    DB.updateUser(info.getUserID(), data).addOnSuccessListener {
+                                        Misc.displaySnackBar(
+                                            constraintLayout,
+                                            "Approved successfully!"
+                                        )
+                                    }.addOnFailureListener { exception ->
+                                        Misc.displaySnackBar(
+                                            constraintLayout,
+                                            exception.message.toString()
+                                        )
+                                    }
+                                }.addOnFailureListener { exception ->
+                                    Misc.displaySnackBar(
+                                        constraintLayout,
+                                        exception.message.toString()
+                                    )
+                                }
+                        }.addOnFailureListener { exception ->
+                            Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                        }
                     }
-                }
-                .show()
-        }
+                    .show()
+            }
 
-        holder.denyButton.setOnClickListener {
-            MaterialAlertDialogBuilder(
-                context,
-                com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
-            )
-                .setTitle("You are about to deny this artefact")
-                .setIcon(R.drawable.ic_denied)
-                .setMessage("Are you sure you want to deny this artefact? This can be approved later.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Deny") { _, _ ->
-                    val submissionData: HashMap<String, Any?> = hashMapOf(
-                        "artefact_id" to info.getArtefactID(),
-                        "status" to "denied"
-                    )
+            holder.denyButton.setOnClickListener {
+                MaterialAlertDialogBuilder(
+                    context,
+                    com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+                )
+                    .setTitle("You are about to deny this artefact")
+                    .setIcon(R.drawable.ic_denied)
+                    .setMessage("Are you sure you want to deny this artefact? This can be approved later.")
+                    .setNegativeButton("Cancel", null)
+                    .setPositiveButton("Deny") { _, _ ->
+                        val submissionData: HashMap<String, Any?> = hashMapOf(
+                            "artefact_id" to info.getArtefactID(),
+                            "status" to "denied"
+                        )
 
-                    DB.updateSubmissions(submissionData).addOnSuccessListener {
-                        Misc.displaySnackBar(constraintLayout, "Denied successfully!")
-                    }.addOnFailureListener { exception ->
-                        Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                        DB.updateSubmissions(submissionData).addOnSuccessListener {
+                            Misc.displaySnackBar(constraintLayout, "Denied successfully!")
+                        }.addOnFailureListener { exception ->
+                            Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                        }
                     }
-                }
-                .show()
-        }
+                    .show()
+            }
 
-        holder.editButton.setOnClickListener {
-            val upsertActivityIntent = Intent(context, UpsertActivity::class.java)
-            upsertActivityIntent.putExtra("mode", UpsertMode.UPDATE)
-            upsertActivityIntent.putExtra("artefact_id", info.getArtefactID())
-            context.startActivity(upsertActivityIntent)
-        }
+            holder.editButton.setOnClickListener {
+                val upsertActivityIntent = Intent(context, UpsertActivity::class.java)
+                upsertActivityIntent.putExtra("mode", UpsertMode.UPDATE)
+                upsertActivityIntent.putExtra("artefact_id", info.getArtefactID())
+                context.startActivity(upsertActivityIntent)
+            }
+        } else if (mode == SubmissionType.DENIED) {
+            holder.editButton.visibility = View.GONE
+            holder.approveButton.visibility = View.GONE
+            holder.denyButton.visibility = View.GONE
 
+            if (UserSingleton.getAccountType() != AccountType.CURATOR) {
+                holder.reapproveButton.visibility = View.GONE
+            }
+
+            holder.reapproveButton.setOnClickListener {
+                MaterialAlertDialogBuilder(
+                    context,
+                    com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+                )
+                    .setTitle("You are about to approve a denied artefact")
+                    .setIcon(R.drawable.ic_approve)
+                    .setMessage("Are you sure you want to approve this artefact? You cannot deny this artefact later but you can update or delete the artefact.")
+                    .setNegativeButton("Cancel", null)
+                    .setPositiveButton("Approve") { _, _ ->
+                        val submissionData: HashMap<String, Any?> = hashMapOf(
+                            "artefact_id" to info.getArtefactID(),
+                            "status" to "approved"
+                        )
+
+                        val artefactData: HashMap<String, Any?> = hashMapOf(
+                            "isApproved" to true
+                        )
+
+                        DB.updateSubmissions(submissionData).addOnSuccessListener {
+                            DB.updateBasicArtefact(info.getArtefactID(), artefactData)
+                                .addOnSuccessListener {
+                                    val data: HashMap<String, Any?> = hashMapOf(
+                                        "level" to info.getLevel() + Constants.APPROVE_LEVEL_GAIN
+                                    )
+                                    DB.updateUser(info.getUserID(), data).addOnSuccessListener {
+                                        Misc.displaySnackBar(
+                                            constraintLayout,
+                                            "Approved successfully!"
+                                        )
+                                    }.addOnFailureListener { exception ->
+                                        Misc.displaySnackBar(
+                                            constraintLayout,
+                                            exception.message.toString()
+                                        )
+                                    }
+                                }.addOnFailureListener { exception ->
+                                    Misc.displaySnackBar(
+                                        constraintLayout,
+                                        exception.message.toString()
+                                    )
+                                }
+                        }.addOnFailureListener { exception ->
+                            Misc.displaySnackBar(constraintLayout, exception.message.toString())
+                        }
+                    }
+                    .show()
+            }
+
+            holder.viewButton.setOnClickListener {
+                val upsertActivityIntent = Intent(context, UpsertActivity::class.java)
+                upsertActivityIntent.putExtra("mode", UpsertMode.VIEW)
+                upsertActivityIntent.putExtra("artefact_id", info.getArtefactID())
+                context.startActivity(upsertActivityIntent)
+            }
+        } else if (mode == SubmissionType.APPROVED) {
+            holder.editButton.visibility = View.GONE
+            holder.approveButton.visibility = View.GONE
+            holder.reapproveButton.visibility = View.GONE
+            holder.denyButton.visibility = View.GONE
+
+            holder.viewButton.setOnClickListener {
+                val informationActivityIntent = Intent(context, InformationActivity::class.java)
+                informationActivityIntent.putExtra("artefact_id", info.getArtefactID())
+                context.startActivity(informationActivityIntent)
+            }
+        }
     }
 }
