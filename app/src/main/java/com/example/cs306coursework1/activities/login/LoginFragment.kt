@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import com.example.cs306coursework1.*
 import com.example.cs306coursework1.data.UserSingleton
 import com.example.cs306coursework1.data.AccountType
@@ -29,6 +30,7 @@ class LoginFragment : Fragment() {
     lateinit var emailText: TextInputEditText
     lateinit var passwordText: TextInputEditText
     lateinit var loginButton: Button
+    private lateinit var registerText: TextView
 
     lateinit var museumsActivityIntent: Intent
 
@@ -70,8 +72,6 @@ class LoginFragment : Fragment() {
             passwordText.text.toString()
         ).addOnCompleteListener(requireActivity()) { task ->
             if (task.isSuccessful) {
-                Log.println(Log.INFO, "current_user", task.result.user.toString())
-
                 DB.getUserByUID(task.result.user?.uid.toString())
                     .addOnSuccessListener { documents ->
 

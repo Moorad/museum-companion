@@ -104,8 +104,8 @@ class LinksAdapter(
         })
 
         holder.deleteButton.setOnClickListener {
-            modelArrayList.removeAt(position)
-            notifyItemRemoved(position)
+            modelArrayList.removeAt(holder.adapterPosition)
+            notifyItemRemoved(holder.adapterPosition)
         }
     }
 

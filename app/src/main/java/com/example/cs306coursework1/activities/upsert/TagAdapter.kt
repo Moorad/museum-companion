@@ -72,8 +72,8 @@ class TagAdapter(
         })
 
         holder.deleteButton.setOnClickListener {
-            tagArrayList.removeAt(position)
-            notifyItemRemoved(position)
+            tagArrayList.removeAt(holder.adapterPosition)
+            notifyItemRemoved(holder.adapterPosition)
         }
     }
 

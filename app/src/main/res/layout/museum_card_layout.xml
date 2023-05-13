@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -66,13 +67,22 @@
                 android:layout_gravity="right">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cardDeleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    app:icon="@drawable/ic_delete"
+                    android:visibility="gone"
+                    style="@style/Widget.Material3.Button.IconButton.Filled.Tonal" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/cardEditButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="@string/action_edit"
+                    app:icon="@drawable/ic_edit"
                     android:visibility="gone"
-                    style="?attr/materialButtonOutlinedStyle" />
+                    style="@style/Widget.Material3.Button.IconButton.Filled.Tonal" />
 
 
                 <com.google.android.material.button.MaterialButton

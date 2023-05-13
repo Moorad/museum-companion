@@ -1,7 +1,6 @@
 package com.example.cs306coursework1.activities.browse
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -49,15 +48,14 @@ class ListFragment : Fragment() {
         return view
     }
 
-    private fun populateList(documents: MutableList<DocumentSnapshot>): ArrayList<ListModal> {
-        val list = ArrayList<ListModal>()
+    private fun populateList(documents: MutableList<DocumentSnapshot>): ArrayList<ListModel> {
+        val list = ArrayList<ListModel>()
 
         documents.forEach { doc ->
-            val card = ListModal()
+            val card = ListModel()
             card.setID(doc.id)
             card.setLabel(doc["label"].toString())
             card.setCreatedAt(doc["created_at"] as Timestamp)
-            Log.println(Log.INFO, "created_at type", doc["created_at"]!!.javaClass.name)
 
             card.setName(doc["title"].toString())
             card.setDescription(doc["short_desc"].toString())

@@ -15,7 +15,7 @@ import com.google.android.material.chip.Chip
 
 class ListAdapter(
     private val context: Context,
-    private val cardArrayList: ArrayList<ListModal>
+    private val cardArrayList: ArrayList<ListModel>
 ) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     private val infoActivityIntent = Intent(context, InformationActivity::class.java)

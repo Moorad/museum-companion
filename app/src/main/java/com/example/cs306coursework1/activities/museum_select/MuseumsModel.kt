@@ -1,6 +1,6 @@
 package com.example.cs306coursework1.activities.museum_select
 
-class MuseumsModal {
+class MuseumsModel {
     private var museumID: String? = null;
     private var museumName: String? = null;
     private var museumDescription: String? = null

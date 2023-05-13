@@ -10,7 +10,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.example.cs306coursework1.R
 import com.example.cs306coursework1.activities.information.InformationActivity
 import com.example.cs306coursework1.activities.upsert.UpsertActivity
@@ -21,7 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.floor
 
 class SubmissionAdapter(
-    private val imageModeArrayList: ArrayList<SubmissionModal>,
+    private val imageModeArrayList: ArrayList<SubmissionModel>,
     private val mode: SubmissionType,
     private val context: Context,
     private val constraintLayout: View
@@ -141,6 +142,9 @@ class SubmissionAdapter(
 
                         DB.updateSubmissions(submissionData).addOnSuccessListener {
                             Misc.displaySnackBar(constraintLayout, "Denied successfully!")
+                            imageModeArrayList.removeAt(holder.adapterPosition)
+                            notifyItemRemoved(holder.adapterPosition)
+
                         }.addOnFailureListener { exception ->
                             Misc.displaySnackBar(constraintLayout, exception.message.toString())
                         }
@@ -193,6 +197,8 @@ class SubmissionAdapter(
                                             constraintLayout,
                                             "Approved successfully!"
                                         )
+                                        imageModeArrayList.removeAt(holder.adapterPosition)
+                                        notifyItemRemoved(holder.adapterPosition)
                                     }.addOnFailureListener { exception ->
                                         Misc.displaySnackBar(
                                             constraintLayout,

@@ -20,7 +20,7 @@
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collpasingToolbarLayout"
+            android:id="@+id/collapsingToolbarLayout"
             style="?attr/collapsingToolbarLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
@@ -112,10 +112,12 @@
 
                     <Button
                         style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                        android:id="@+id/voiceButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
+
                         app:icon="@drawable/ic_volume" />
                 </LinearLayout>
             </LinearLayout>

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cs306coursework1.R
-import com.example.cs306coursework1.activities.browse.BrowseActivity
 import com.example.cs306coursework1.activities.submission.fragments.ApprovedFragment
 import com.example.cs306coursework1.activities.submission.fragments.DeniedFragment
 import com.example.cs306coursework1.activities.submission.fragments.PendingFragment
@@ -25,7 +24,6 @@ class SubmissionFragment(private val AppBar: MaterialToolbar) : Fragment() {
     private lateinit var viewPager: ViewPager2
     private lateinit var noEntryMessage: LinearLayout
 
-    private lateinit var browseActivityIntent: Intent
     private lateinit var upsertActivityIntent: Intent
 
     override fun onCreateView(
@@ -37,7 +35,6 @@ class SubmissionFragment(private val AppBar: MaterialToolbar) : Fragment() {
 
         AppBar.title = "Artefact submissions"
 
-        browseActivityIntent = Intent(context, BrowseActivity::class.java)
         upsertActivityIntent = Intent(context, UpsertActivity::class.java)
 
         viewPager = view.findViewById(R.id.viewPager)
@@ -63,10 +60,16 @@ class SubmissionFragment(private val AppBar: MaterialToolbar) : Fragment() {
             noEntryMessage.visibility = View.GONE
         }
 
-        val fragments = arrayListOf(ApprovedFragment(), PendingFragment(), DeniedFragment())
+        val fragments = arrayListOf(
+            ApprovedFragment(activity),
+            PendingFragment(activity),
+            DeniedFragment(activity)
+        )
         val viewPagerAdapter = ViewPagerAdapter(fragments, childFragmentManager, lifecycle)
         viewPager.adapter = viewPagerAdapter
         viewPager.isSaveEnabled = false
+
+
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {

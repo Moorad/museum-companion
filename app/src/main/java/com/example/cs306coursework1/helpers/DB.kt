@@ -24,6 +24,10 @@ class DB {
             return db.collection("users").whereEqualTo("uid", uid).get()
         }
 
+        fun getAllUsers(): Task<QuerySnapshot> {
+            return db.collection("users").get()
+        }
+
         fun getUsersByUIDs(uids: ArrayList<String>): Task<QuerySnapshot> {
             return db.collection("users").whereIn("uid", uids).get()
         }
@@ -222,6 +226,23 @@ class DB {
             }
 
             return taskCompletionSource.task
+        }
+
+        fun createMuseum(data: HashMap<String, Any?>): Task<DocumentReference> {
+            return db.collection("museums").add(data)
+        }
+
+        fun updateMuseum(museum_id: String, data: HashMap<String, Any?>): Task<Void> {
+            return db.collection("museums").document(museum_id).update(data)
+        }
+
+        fun getMuseumByID(museum_id: String): Task<DocumentSnapshot> {
+            return db.collection("museums")
+                .document(museum_id).get()
+        }
+
+        fun deleteMuseum(museum_id: String): Task<Void> {
+            return db.collection("museums").document(museum_id).delete()
         }
     }
 }

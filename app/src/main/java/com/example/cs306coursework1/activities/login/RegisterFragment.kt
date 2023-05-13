@@ -55,7 +55,11 @@ class RegisterFragment : Fragment() {
         registerButton = view.findViewById(R.id.registerButton)
 
         // Set the first account type ("Standard") in the string array as the default
-        accountTypeSelect.setText(resources.getStringArray(R.array.account_types)[0])
+        accountTypeSelect
+            .setText(
+                resources.getStringArray(R.array.account_types)[0],
+                false
+            )
 
         val registerBackButton = view.findViewById<Button>(R.id.registerBackButton)
 
@@ -90,7 +94,7 @@ class RegisterFragment : Fragment() {
                         emailText.text.toString(),
                         AccountType.getTypeFromString(accountTypeSelect.text.toString())
                     )
-                    
+
                     startActivity(museumsActivityIntent)
                 }
                     .addOnFailureListener { exception ->

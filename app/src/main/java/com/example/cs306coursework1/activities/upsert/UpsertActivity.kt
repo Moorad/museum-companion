@@ -95,8 +95,6 @@ class UpsertActivity : AppCompatActivity() {
             intent.getSerializableExtra("mode") as UpsertMode?
         }
 
-        Log.println(Log.INFO, "user", UserSingleton.getAccountType().toString())
-
         if (mode == UpsertMode.UPDATE || mode == UpsertMode.VIEW) {
             artefactID = intent.getStringExtra("artefact_id")
         }
@@ -242,7 +240,7 @@ class UpsertActivity : AppCompatActivity() {
 
                                     val model = GalleryModel()
                                     model.setImageURL(downloadURL)
-                                    model.setImageName("ABC")
+                                    model.setImageName(downloadURL)
                                     galleryAdapter.addItem(model)
 
                                     (uploadedImages["gallery"] as ArrayList<String>).add(downloadURL)
@@ -286,7 +284,6 @@ class UpsertActivity : AppCompatActivity() {
             }
 
         heroSelectButton.setOnClickListener {
-            Log.println(Log.INFO, "hero", "button clicked")
             singleSelectPhotoMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
@@ -396,10 +393,10 @@ class UpsertActivity : AppCompatActivity() {
 
             // Gallery
             if (Misc.existsIn(doc, "gallery")) {
-                (doc["gallery"] as ArrayList<String>).forEach { imageURL ->
+                (doc["gallery"] as ArrayList<String>).forEachIndexed { i, imageURL ->
                     val model = GalleryModel()
                     model.setImageURL(imageURL)
-                    model.setImageName("ABC")
+                    model.setImageName("Image $i")
                     galleryAdapter.addItem(model)
 
                     (uploadedImages["gallery"] as ArrayList<String>).add(imageURL)
@@ -704,11 +701,11 @@ class UpsertActivity : AppCompatActivity() {
 
     private fun imageURLsToModels(urls: ArrayList<String>): ArrayList<GalleryModel> {
         val models = ArrayList<GalleryModel>()
-        urls.forEach { url ->
+        urls.forEachIndexed { i, url ->
             val model = GalleryModel()
 
             model.setImageURL(url)
-            model.setImageName(url)
+            model.setImageName("Image $i")
 
             models.add(model)
         }

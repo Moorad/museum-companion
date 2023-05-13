@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
@@ -17,7 +18,7 @@ import com.example.cs306coursework1.helpers.DB
 import com.example.cs306coursework1.helpers.Misc
 
 
-class ApprovedFragment : Fragment() {
+class ApprovedFragment(private val activity: FragmentActivity?) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

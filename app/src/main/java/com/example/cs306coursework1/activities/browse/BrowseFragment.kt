@@ -1,6 +1,5 @@
 package com.example.cs306coursework1.activities.browse
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,22 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.cs306coursework1.R
 import com.example.cs306coursework1.activities.login.LoginActivity
-import com.example.cs306coursework1.activities.main.MainActivity
 import com.example.cs306coursework1.activities.museum_select.MuseumSelectActivity
-import com.example.cs306coursework1.activities.submission.SubmissionsActivity
-import com.example.cs306coursework1.data.UserSingleton
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class BrowseFragment(private val AppBar: MaterialToolbar) : Fragment() {
 
     private var isMapView = false
 
-    private lateinit var submissionActivityIntent: Intent
     private lateinit var loginActivityIntent: Intent
 
     override fun onCreateView(
@@ -34,6 +25,7 @@ class BrowseFragment(private val AppBar: MaterialToolbar) : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_browse, container, false)
 
+        AppBar.menu.clear()
         AppBar.title = "Browsing artefacts"
 
         AppBar.inflateMenu(R.menu.browse_activity_menu)
@@ -50,7 +42,6 @@ class BrowseFragment(private val AppBar: MaterialToolbar) : Fragment() {
             }
         }
 
-        submissionActivityIntent = Intent(context, SubmissionsActivity::class.java)
         loginActivityIntent = Intent(context, LoginActivity::class.java)
 
         val mapFragment = MapFragment()

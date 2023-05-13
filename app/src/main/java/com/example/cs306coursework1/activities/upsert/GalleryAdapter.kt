@@ -49,9 +49,9 @@ class GalleryAdapter(
 
         holder.deleteButton.setOnClickListener {
             Storage.deleteImage(info.getImageURL())
-            modelArrayList.removeAt(position)
-            removeListener(position)
-            notifyItemRemoved(position)
+            modelArrayList.removeAt(holder.adapterPosition)
+            removeListener(holder.adapterPosition)
+            notifyItemRemoved(holder.adapterPosition)
 
         }
     }

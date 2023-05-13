@@ -16,12 +16,12 @@
     <string name="login_title"><b>Sign in</b></string>
     <string name="login_description">Sign into your standard or curator account</string>
     <string name="login_button">Sign in</string>
-    <string name="login_not_registered">Not registered? Sign up</string>
+    <string name="login_not_registered"><u>Not registered? Sign up</u></string>
 
     <string name="register_title"><b>Sign up</b></string>
     <string name="register_description">Create a new account as a standard user or curator</string>
     <string name="register_button">Sign up</string>
-    <string name="register_not_logged_in">You already have an account? Sign in</string>
+    <string name="register_not_logged_in"><u>You already have an account? Sign in</u></string>
 
     <string-array name="account_types">
         <item>Standard</item>
@@ -111,4 +111,8 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_museum_upsert">MuseumUpsertActivity</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

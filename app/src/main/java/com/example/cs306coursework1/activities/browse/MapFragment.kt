@@ -34,8 +34,6 @@ class MapFragment : Fragment() {
         val infoActivityIntent = Intent(this.context, InformationActivity::class.java)
 
         artefactNumInput.setOnEditorActionListener { textView, id, keyEvent ->
-            Log.println(Log.INFO, "input text", artefactNumInput.text.toString())
-
             if (id == EditorInfo.IME_ACTION_DONE) {
                 Misc.closeKeyboard(view)
 

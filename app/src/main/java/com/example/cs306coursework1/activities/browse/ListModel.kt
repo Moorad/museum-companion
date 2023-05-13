@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-class ListModal {
+class ListModel {
     private var artefactID: String? = null
     private var artefactCreatedAt: String? = null
     private var artefactLabel: String? = null

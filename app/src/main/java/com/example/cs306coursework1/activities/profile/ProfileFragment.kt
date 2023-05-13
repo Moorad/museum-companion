@@ -101,7 +101,6 @@ class ProfileFragment(private val AppBar: MaterialToolbar) : Fragment() {
 
         DB.getUserByUID(UserSingleton.getID()).addOnSuccessListener { docs ->
             val user = docs.first()
-            Log.d("user", user.toString())
             Misc.setImageFromURL(user["profile_image"].toString(), profileImage)
 
             usernameTextView.text = Misc.boldText(user["name"].toString())
@@ -142,8 +141,8 @@ class ProfileFragment(private val AppBar: MaterialToolbar) : Fragment() {
 
                                 DB.updateUser(UserSingleton.getID(), data).addOnSuccessListener {
                                     Misc.setImageFromURL(downloadURL, profileImage)
-                                }.addOnFailureListener {
-                                    Misc.displaySnackBar(linearLayout, task.exception.toString())
+                                }.addOnFailureListener { exception ->
+                                    Misc.displaySnackBar(linearLayout, exception.message.toString())
                                 }
                             } else {
                                 Misc.displaySnackBar(linearLayout, task.exception.toString())
@@ -188,7 +187,6 @@ class ProfileFragment(private val AppBar: MaterialToolbar) : Fragment() {
 
                         DB.updateUser(UserSingleton.getID(), data).addOnSuccessListener {
                             UserSingleton.setUsername(newUsername)
-                            Log.d("new username", UserSingleton.getUsername())
                             usernameTextView.text = Misc.boldText(newUsername)
                         }.addOnFailureListener { exception ->
                             Misc.displaySnackBar(linearLayout, exception.message.toString())

@@ -1,6 +1,6 @@
 package com.example.cs306coursework1.activities.submission.fragments
 
-class SubmissionModal {
+class SubmissionModel {
     var modelName: String? = null;
     private var modelUserID: String? = null
     private var modelImage: Int = 0
