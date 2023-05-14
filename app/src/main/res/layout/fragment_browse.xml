@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
+
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/switchViewFloatingButton"
             android:layout_width="wrap_content"
@@ -18,6 +19,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_list_view"
+            android:visibility="gone"
             app:icon="@drawable/ic_list_view" />
 
         <FrameLayout
@@ -25,12 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:layout="@layout/fragment_map" />
+            app:layout_constraintTop_toBottomOf="parent"
+            tools:layout="@layout/fragment_list" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

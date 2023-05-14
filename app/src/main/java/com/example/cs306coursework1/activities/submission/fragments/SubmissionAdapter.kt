@@ -2,6 +2,7 @@ package com.example.cs306coursework1.activities.submission.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.ImageView
@@ -57,7 +58,7 @@ class SubmissionAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = imageModeArrayList[position]
 
-        holder.imgView.setImageResource(info.getImage())
+        Misc.setImageFromURL(info.getImage(), holder.imgView)
         holder.txtView.text = info.getName()
         holder.lastUpdatedView.text = info.getLastUpdated()
 

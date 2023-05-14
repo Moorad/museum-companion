@@ -231,7 +231,7 @@ class UpsertActivity : AppCompatActivity() {
 
         val multipleSelectPhotoMedia =
             registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
-                uris.forEach { uri ->
+                uris.forEachIndexed { i, uri ->
                     if (uri != null) {
                         Storage.uploadImage(uri, "gallery_images", constraintLayout)
                             .addOnCompleteListener { task ->
@@ -240,7 +240,7 @@ class UpsertActivity : AppCompatActivity() {
 
                                     val model = GalleryModel()
                                     model.setImageURL(downloadURL)
-                                    model.setImageName(downloadURL)
+                                    model.setImageName("Image ${galleryAdapter.itemCount}")
                                     galleryAdapter.addItem(model)
 
                                     (uploadedImages["gallery"] as ArrayList<String>).add(downloadURL)

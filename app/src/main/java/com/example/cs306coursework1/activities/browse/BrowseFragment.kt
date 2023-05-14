@@ -50,11 +50,11 @@ class BrowseFragment(private val AppBar: MaterialToolbar) : Fragment() {
             view.findViewById<ExtendedFloatingActionButton>(R.id.switchViewFloatingButton)
 
         // Show map fragment by default
-        if (isMapView) {
-            showFragment(mapFragment)
-        } else {
-            showFragment(listFragment)
-        }
+//        if (isMapView) {
+//            showFragment(mapFragment)
+//        } else {
+        showFragment(listFragment)
+//        }
 
         switchViewButton.setOnClickListener {
             if (isMapView) {

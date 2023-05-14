@@ -1,9 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--Student Name: Moorad Altamimi-->
-<!--Student Number: 854378-->
-
-<!--Note: I am using material 3, if you want to run this activity-->
-<!--import material 3 in your build.gradle file-->
-
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -191,7 +186,7 @@
                     android:layout_weight="0"
                     app:icon="@drawable/ic_delete"
                     android:text="Remove photo"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
             </LinearLayout>
 

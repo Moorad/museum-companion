@@ -51,7 +51,9 @@ class ListFragment : Fragment() {
     private fun populateList(documents: MutableList<DocumentSnapshot>): ArrayList<ListModel> {
         val list = ArrayList<ListModel>()
 
-        documents.forEach { doc ->
+        documents.sortedBy { str ->
+            str["label"].toString().takeWhile { c -> c.isDigit() }.toIntOrNull() ?: Int.MAX_VALUE
+        }.forEach { doc ->
             val card = ListModel()
             card.setID(doc.id)
             card.setLabel(doc["label"].toString())

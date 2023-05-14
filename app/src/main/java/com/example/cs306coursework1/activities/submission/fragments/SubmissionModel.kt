@@ -3,7 +3,7 @@ package com.example.cs306coursework1.activities.submission.fragments
 class SubmissionModel {
     var modelName: String? = null;
     private var modelUserID: String? = null
-    private var modelImage: Int = 0
+    private var modelImage: String? = null
     private var modelLevel: Double = 0.0
     private var artefactID: String? = null
     private var lastUpdated: String? = null
@@ -33,12 +33,12 @@ class SubmissionModel {
     }
 
 
-    fun getImage(): Int {
-        return modelImage
+    fun getImage(): String {
+        return modelImage.toString()
     }
 
-    fun setImage(image_drawable: Int) {
-        this.modelImage = image_drawable
+    fun setImage(imageURL: String) {
+        this.modelImage = imageURL
     }
 
     fun getLevel(): Double {

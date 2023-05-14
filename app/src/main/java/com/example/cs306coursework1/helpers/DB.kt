@@ -194,6 +194,7 @@ class DB {
 
         fun updateSubmissions(data: HashMap<String, Any?>): Task<Void> {
             val taskCompletionSource = TaskCompletionSource<Void>()
+            Log.d("problem", data.toString())
 
             db.collection("submissions").whereEqualTo("artefact_id", data["artefact_id"].toString())
                 .get().addOnSuccessListener {

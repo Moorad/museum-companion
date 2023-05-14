@@ -102,7 +102,7 @@ class PendingFragment(private val activity: FragmentActivity?) : Fragment() {
                             (doc["last_updated"] as Timestamp).toDate()
                         ).toString()
                     )
-                    model.setImage(R.drawable.ah)
+                    model.setImage(user?.get("profile_image").toString())
                     model.setLevel(user?.get("level") as Double)
                     model.setArtefactID(doc["artefact_id"].toString())
                     models.add(model)

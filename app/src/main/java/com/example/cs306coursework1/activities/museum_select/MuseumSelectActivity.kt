@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cs306coursework1.R
 import com.example.cs306coursework1.activities.login.LoginActivity
 import com.example.cs306coursework1.activities.museum_upsert.MuseumUpsertActivity
+import com.example.cs306coursework1.data.AccountType
 import com.example.cs306coursework1.data.UpsertMode
 import com.example.cs306coursework1.data.UserSingleton
 import com.example.cs306coursework1.helpers.DB
@@ -48,6 +49,10 @@ class MuseumSelectActivity : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+
+        if (UserSingleton.getAccountType() != AccountType.CURATOR) {
+            topAppBar.menu.findItem(R.id.action_add).isVisible = false
         }
 
         Misc.displaySnackBar(

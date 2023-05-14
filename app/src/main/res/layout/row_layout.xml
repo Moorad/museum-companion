@@ -9,8 +9,7 @@
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/icon"
         android:layout_width="50dp"
-        android:layout_height="50dp"
-        tools:src="@drawable/ah" />
+        android:layout_height="50dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="50dp"
